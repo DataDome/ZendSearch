@@ -97,6 +97,9 @@ class QueryParser extends Lucene\AbstractFSM
      */
     private $_defaultEncoding = '';
 
+
+    private $_fieldMapping = [];
+
     /**
      * Defines query parsing mode.
      *
@@ -401,6 +404,9 @@ class QueryParser extends Lucene\AbstractFSM
      */
     public function addTermEntry()
     {
+        if(! array_key_exists($this->_context->getField(), $this->_fieldMapping)) {
+            throw new \Exception('Unknown field ' . $this->_context->getField());
+        }
         $entry = new QueryEntry\Term($this->_currentToken->text, $this->_context->getField());
         $this->_context->addEntry($entry);
     }
@@ -410,6 +416,9 @@ class QueryParser extends Lucene\AbstractFSM
      */
     public function addPhraseEntry()
     {
+        if(! array_key_exists($this->_context->getField(), $this->_fieldMapping)) {
+            throw new \Exception('Unknown field ' . $this->_context->getField());
+        }
         $entry = new QueryEntry\Phrase($this->_currentToken->text, $this->_context->getField());
         $this->_context->addEntry($entry);
     }
@@ -581,5 +590,21 @@ class QueryParser extends Lucene\AbstractFSM
         $rangeQuery = new Query\Range($from, $to, true);
         $entry      = new QueryEntry\Subquery($rangeQuery);
         $this->_context->addEntry($entry);
+    }
+
+    /**
+     * @return array
+     */
+    public static function getFieldMapping(): array
+    {
+        return self::_getInstance()->_fieldMapping;
+    }
+
+    /**
+     * @param array $fieldMapping
+     */
+    public static function setFieldMapping(array $fieldMapping)
+    {
+        self::_getInstance()->_fieldMapping = $fieldMapping;
     }
 }
