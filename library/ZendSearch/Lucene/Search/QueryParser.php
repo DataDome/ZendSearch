@@ -380,7 +380,6 @@ class QueryParser extends Lucene\AbstractFSM
                 $query = new Query\MultiTerm();
                 $termsSign = (self::$_instance->_defaultOperator == self::B_AND) ? true /* required term */ :
                                                                                    null /* optional term */;
-
                 foreach ($queryTokens as $token) {
                     $query->addTerm(new Index\Term($token->getTermText()), $termsSign);
                 }
@@ -404,10 +403,11 @@ class QueryParser extends Lucene\AbstractFSM
      */
     public function addTermEntry()
     {
-        if(! array_key_exists($this->_context->getField(), $this->_fieldMapping)) {
-            throw new \Exception('Unknown field ' . $this->_context->getField());
+        $field = $this->_context->getField();
+        if($field && $this->_fieldMapping && ! array_key_exists($field, $this->_fieldMapping)) {
+            throw new \Exception('No mapping found for field ' . $field);
         }
-        $entry = new QueryEntry\Term($this->_currentToken->text, $this->_context->getField());
+        $entry = new QueryEntry\Term($this->_currentToken->text, $field ? $this->_fieldMapping[$field] : $field);
         $this->_context->addEntry($entry);
     }
 
@@ -416,10 +416,11 @@ class QueryParser extends Lucene\AbstractFSM
      */
     public function addPhraseEntry()
     {
-        if(! array_key_exists($this->_context->getField(), $this->_fieldMapping)) {
-            throw new \Exception('Unknown field ' . $this->_context->getField());
+        $field = $this->_context->getField();
+        if($field && $this->_fieldMapping && ! array_key_exists($field, $this->_fieldMapping)) {
+            throw new \Exception('No mapping found for field ' . $field);
         }
-        $entry = new QueryEntry\Phrase($this->_currentToken->text, $this->_context->getField());
+        $entry = new QueryEntry\Phrase($this->_currentToken->text, $field ?  $this->_fieldMapping[$field] : $field);
         $this->_context->addEntry($entry);
     }
 
