@@ -400,12 +400,13 @@ class QueryParser extends Lucene\AbstractFSM
 
     /**
      * Add term to a query
+     * @throws \Exception
      */
     public function addTermEntry()
     {
         $field = $this->_context->getField();
         if($field && $this->_fieldMapping && ! array_key_exists($field, $this->_fieldMapping)) {
-            throw new \Exception('No mapping found for field ' . $field);
+            throw new \Exception('Field ' . $field . ' unauthorized. Authorized fields are: ' . implode(',',array_keys($this->_fieldMapping)));
         }
         $entry = new QueryEntry\Term($this->_currentToken->text, $field ? $this->_fieldMapping[$field] : $field);
         $this->_context->addEntry($entry);
@@ -413,12 +414,13 @@ class QueryParser extends Lucene\AbstractFSM
 
     /**
      * Add phrase to a query
+     * @throws \Exception
      */
     public function addPhraseEntry()
     {
         $field = $this->_context->getField();
         if($field && $this->_fieldMapping && ! array_key_exists($field, $this->_fieldMapping)) {
-            throw new \Exception('No mapping found for field ' . $field);
+            throw new \Exception('Field ' . $field . ' unauthorized. Authorized fields are: ' . implode(',',array_keys($this->_fieldMapping)));
         }
         $entry = new QueryEntry\Phrase($this->_currentToken->text, $field ?  $this->_fieldMapping[$field] : $field);
         $this->_context->addEntry($entry);
