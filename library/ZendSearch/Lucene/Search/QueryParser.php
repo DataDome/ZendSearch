@@ -581,7 +581,7 @@ class QueryParser extends Lucene\AbstractFSM
     {
         if($field && $this->_fieldMapping && ! array_key_exists($field, $this->_fieldMapping)) {
             $authorizedFields = implode(', ', array_diff(array_keys($this->_fieldMapping), $this->_privateFields));
-            throw new QueryParserException("Field $field is not unauthorized. Authorized fields are: $authorizedFields.");
+            throw new QueryParserException("Field $field is not authorized. Authorized fields are: $authorizedFields.");
         }
         return true;
     }
