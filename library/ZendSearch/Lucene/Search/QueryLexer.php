@@ -43,13 +43,15 @@ class QueryLexer extends Lucene\AbstractFSM
     const IN_CHAR            = 7;
     const IN_MUTABLE_CHAR    = 8;
 
-    const QUERY_WHITE_SPACE_CHARS      = " \n\r\t";
-    const QUERY_SYNT_CHARS             = ':()[]{}!|&';
-    const QUERY_MUTABLE_CHARS          = '+-';
-    const QUERY_DOUBLECHARLEXEME_CHARS = '|&';
-    const QUERY_REGEXP_DELIMITER_CHAR  = '/';
-    const QUERY_LEXEMEMODIFIER_CHARS   = '~^';
-    const QUERY_ASCIIDIGITS_CHARS      = '0123456789';
+    const QUERY_WHITE_SPACE_CHARS               = " \n\r\t";
+    const QUERY_SYNT_CHARS                      = ':()[]{}!|&';
+    const QUERY_MUTABLE_CHARS                   = '+-';
+    const QUERY_DOUBLECHARLEXEME_CHARS          = '|&';
+    const QUERY_REGEXP_DELIMITER_CHAR           = '/';
+    const QUERY_LEXEMEMODIFIER_CHARS            = '~^';
+    const QUERY_SINGLE_CHAR_WILDCARD_CHAR       = '?';
+    const QUERY_MULTIPLE_CHAR_WILDCARD_CHAR     = '*';
+    const QUERY_ASCIIDIGITS_CHARS               = '0123456789';
 
     /**
      * List of recognized lexemes

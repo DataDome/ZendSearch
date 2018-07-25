@@ -315,7 +315,8 @@ class Term extends AbstractPreprocessing
             str_split(QueryLexer::QUERY_MUTABLE_CHARS),
             str_split(QueryLexer::QUERY_REGEXP_DELIMITER_CHAR),
             str_split(QueryLexer::QUERY_DOUBLECHARLEXEME_CHARS),
-            str_split(QueryLexer::QUERY_LEXEMEMODIFIER_CHARS)
+            str_split(QueryLexer::QUERY_LEXEMEMODIFIER_CHARS),
+            str_split(QueryLexer::QUERY_SINGLE_CHAR_WILDCARD_CHAR)
         );
         $escapedWord = '';
         for($charIndex = 0; $charIndex < mb_strlen($this->_word, $this->_encoding); $charIndex++) {
