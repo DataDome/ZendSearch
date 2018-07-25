@@ -49,7 +49,7 @@ class QueryParser extends Lucene\AbstractFSM
     /**
      * Current token
      *
-     * @var integer|string
+     * @var integer|string|QueryToken
      */
     private $_currentToken;
 
@@ -99,6 +99,8 @@ class QueryParser extends Lucene\AbstractFSM
 
 
     private $_fieldMapping = [];
+
+    private $_disallowNonSpecifiedTerm = false;
 
     /**
      * Defines query parsing mode.
@@ -405,8 +407,12 @@ class QueryParser extends Lucene\AbstractFSM
     public function addTermEntry()
     {
         $field = $this->_context->getField();
+
+        if($this->_disallowNonSpecifiedTerm && !$field) {
+            throw new \Exception('A term without a specified field is not allowed.');
+        }
         if($field && $this->_fieldMapping && ! array_key_exists($field, $this->_fieldMapping)) {
-            throw new \Exception('Field ' . $field . ' unauthorized. Authorized fields are: ' . implode(',',array_keys($this->_fieldMapping)));
+            throw new \Exception('Field ' . $field . ' is not unauthorized. Authorized fields are: ' . implode(',',array_keys($this->_fieldMapping)));
         }
         $entry = new QueryEntry\Term($this->_currentToken->text, $field ? $this->_fieldMapping[$field] : $field);
         $this->_context->addEntry($entry);
@@ -419,8 +425,13 @@ class QueryParser extends Lucene\AbstractFSM
     public function addPhraseEntry()
     {
         $field = $this->_context->getField();
+
+        if($this->_disallowNonSpecifiedTerm && !$field) {
+            throw new \Exception('A phrase without a specified field is not allowed.');
+        }
+
         if($field && $this->_fieldMapping && ! array_key_exists($field, $this->_fieldMapping)) {
-            throw new \Exception('Field ' . $field . ' unauthorized. Authorized fields are: ' . implode(',',array_keys($this->_fieldMapping)));
+            throw new \Exception('Field ' . $field . ' is not unauthorized. Authorized fields are: ' . implode(',',array_keys($this->_fieldMapping)));
         }
         $entry = new QueryEntry\Phrase($this->_currentToken->text, $field ?  $this->_fieldMapping[$field] : $field);
         $this->_context->addEntry($entry);
@@ -609,5 +620,21 @@ class QueryParser extends Lucene\AbstractFSM
     public static function setFieldMapping(array $fieldMapping)
     {
         self::_getInstance()->_fieldMapping = $fieldMapping;
+    }
+
+    /**
+     * @return bool
+     */
+    public static function isDisallowNonSpecifiedTerm(): bool
+    {
+        return self::_getInstance()->_disallowNonSpecifiedTerm;
+    }
+
+    /**
+     * @param bool $disallowNonSpecifiedTerm
+     */
+    public static function setDisallowNonSpecifiedTerm(bool $disallowNonSpecifiedTerm)
+    {
+        self::_getInstance()->_disallowNonSpecifiedTerm = $disallowNonSpecifiedTerm;
     }
 }
