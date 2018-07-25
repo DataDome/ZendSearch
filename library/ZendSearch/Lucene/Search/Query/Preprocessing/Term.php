@@ -17,6 +17,7 @@ use ZendSearch\Lucene\Search\Exception\QueryParserException;
 use ZendSearch\Lucene\Search\Highlighter\HighlighterInterface as Highlighter;
 use ZendSearch\Lucene\Search\Query;
 use Zend\Stdlib\ErrorHandler;
+use ZendSearch\Lucene\Search\QueryLexer;
 
 /**
  * It's an internal abstract class intended to finalize ase a query processing after query parsing.
@@ -304,14 +305,28 @@ class Term extends AbstractPreprocessing
      */
     public function __toString()
     {
-        // It's used only for query visualisation, so we don't care about characters escaping
         if ($this->_field !== null) {
             $query = $this->_field . ':';
         } else {
             $query = '';
         }
+        $charsToEscape = array_merge(
+            str_split(QueryLexer::QUERY_SYNT_CHARS),
+            str_split(QueryLexer::QUERY_MUTABLE_CHARS),
+            str_split(QueryLexer::QUERY_REGEXP_DELIMITER_CHAR),
+            str_split(QueryLexer::QUERY_DOUBLECHARLEXEME_CHARS),
+            str_split(QueryLexer::QUERY_LEXEMEMODIFIER_CHARS)
+        );
+        $escapedWord = '';
+        for($charIndex = 0; $charIndex < mb_strlen($this->_word, $this->_encoding); $charIndex++) {
+            if(in_array($this->_word[$charIndex], $charsToEscape) &&
+                ($charIndex === 0 || $this->_word[$charIndex - 1] != '\\')) {
+                $escapedWord .= '\\';
+            }
+            $escapedWord .= $this->_word[$charIndex];
+        }
 
-        $query .= $this->_word;
+        $query .= $escapedWord;
 
         if ($this->getBoost() != 1) {
             $query .= '^' . round($this->getBoost(), 4);

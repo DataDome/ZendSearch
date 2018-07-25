@@ -47,6 +47,7 @@ class QueryLexer extends Lucene\AbstractFSM
     const QUERY_SYNT_CHARS             = ':()[]{}!|&';
     const QUERY_MUTABLE_CHARS          = '+-';
     const QUERY_DOUBLECHARLEXEME_CHARS = '|&';
+    const QUERY_REGEXP_DELIMITER_CHAR  = '/';
     const QUERY_LEXEMEMODIFIER_CHARS   = '~^';
     const QUERY_ASCIIDIGITS_CHARS      = '0123456789';
 
