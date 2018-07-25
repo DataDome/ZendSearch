@@ -409,11 +409,10 @@ class QueryParser extends Lucene\AbstractFSM
         $field = $this->_context->getField();
 
         if($this->_disallowNonSpecifiedTerm && !$field) {
-            throw new \Exception('A term without a specified field is not allowed.');
+            throw new QueryParserException('A term without a specified field is not allowed.');
         }
-        if($field && $this->_fieldMapping && ! array_key_exists($field, $this->_fieldMapping)) {
-            throw new \Exception('Field ' . $field . ' is not unauthorized. Authorized fields are: ' . implode(',',array_keys($this->_fieldMapping)));
-        }
+        $this->validateField($field);
+
         $entry = new QueryEntry\Term($this->_currentToken->text, $field ? $this->_fieldMapping[$field] : $field);
         $this->_context->addEntry($entry);
     }
@@ -427,12 +426,11 @@ class QueryParser extends Lucene\AbstractFSM
         $field = $this->_context->getField();
 
         if($this->_disallowNonSpecifiedTerm && !$field) {
-            throw new \Exception('A phrase without a specified field is not allowed.');
+            throw new QueryParserException('A phrase without a specified field is not allowed.');
         }
 
-        if($field && $this->_fieldMapping && ! array_key_exists($field, $this->_fieldMapping)) {
-            throw new \Exception('Field ' . $field . ' is not unauthorized. Authorized fields are: ' . implode(',',array_keys($this->_fieldMapping)));
-        }
+        $this->validateField($field);
+
         $entry = new QueryEntry\Phrase($this->_currentToken->text, $field ?  $this->_fieldMapping[$field] : $field);
         $this->_context->addEntry($entry);
     }
@@ -559,9 +557,30 @@ class QueryParser extends Lucene\AbstractFSM
             throw new QueryParserException('At least one range query boundary term must be non-empty term');
         }
 
+        if($this->_disallowNonSpecifiedTerm && ($from->field === null || $to->field === null)) {
+            throw new QueryParserException('Field declaration is missing in range.');
+        }
+
+        $this->validateField($from->field);
+        $this->validateField($to->field);
+        $from->field = $from->field ? $this->_fieldMapping[$from->field] : $from->field;
+        $to->field   = $to->field   ? $this->_fieldMapping[$to->field]   : $to->field;
+
         $rangeQuery = new Query\Range($from, $to, false);
         $entry      = new QueryEntry\Subquery($rangeQuery);
         $this->_context->addEntry($entry);
+    }
+
+    /**
+     * @param $field
+     * @return bool
+     */
+    private function validateField($field)
+    {
+        if($field && $this->_fieldMapping && ! array_key_exists($field, $this->_fieldMapping)) {
+            throw new QueryParserException('Field ' . $field . ' is not unauthorized. Authorized fields are: ' . implode(',',array_keys($this->_fieldMapping)));
+        }
+        return true;
     }
 
     /**
@@ -600,6 +619,15 @@ class QueryParser extends Lucene\AbstractFSM
         if ($from === null  &&  $to === null) {
             throw new QueryParserException('At least one range query boundary term must be non-empty term');
         }
+
+        if($this->_disallowNonSpecifiedTerm && ($from->field === null || $to->field === null)) {
+            throw new QueryParserException('Field declaration is missing in range.');
+        }
+
+        $this->validateField($from->field);
+        $this->validateField($to->field);
+        $from->field = $from->field ? $this->_fieldMapping[$from->field] : $from->field;
+        $to->field   = $to->field   ? $this->_fieldMapping[$to->field]   : $to->field;
 
         $rangeQuery = new Query\Range($from, $to, true);
         $entry      = new QueryEntry\Subquery($rangeQuery);
