@@ -297,7 +297,6 @@ class QueryLexer extends Lucene\AbstractFSM
         if        (strpos(self::QUERY_WHITE_SPACE_CHARS,    $char) !== false) { return self::IN_WHITE_SPACE;
         } elseif (strpos(self::QUERY_SYNT_CHARS,           $char) !== false) { return self::IN_SYNT_CHAR;
         } elseif (strpos(self::QUERY_MUTABLE_CHARS,        $char) !== false) { return self::IN_MUTABLE_CHAR;
-        } elseif (strpos(self::QUERY_LEXEMEMODIFIER_CHARS, $char) !== false) { return self::IN_LEXEME_MODIFIER;
         } elseif (strpos(self::QUERY_ASCIIDIGITS_CHARS,    $char) !== false) { return self::IN_ASCII_DIGIT;
         } elseif ($char === '"' )                                            { return self::IN_QUOTE;
         } elseif ($char === '.' )                                            { return self::IN_DECIMAL_POINT;
