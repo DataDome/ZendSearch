@@ -100,6 +100,8 @@ class QueryParser extends Lucene\AbstractFSM
 
     private $_fieldMapping = [];
 
+    private $_privateFields = [];
+
     private $_disallowNonSpecifiedTerm = false;
 
     /**
@@ -578,7 +580,8 @@ class QueryParser extends Lucene\AbstractFSM
     private function validateField($field)
     {
         if($field && $this->_fieldMapping && ! array_key_exists($field, $this->_fieldMapping)) {
-            throw new QueryParserException('Field ' . $field . ' is not unauthorized. Authorized fields are: ' . implode(',',array_keys($this->_fieldMapping)));
+            $authorizedFields = implode(', ', array_diff(array_keys($this->_fieldMapping), $this->_privateFields));
+            throw new QueryParserException("Field $field is not unauthorized. Authorized fields are: $authorizedFields.");
         }
         return true;
     }
@@ -648,6 +651,22 @@ class QueryParser extends Lucene\AbstractFSM
     public static function setFieldMapping(array $fieldMapping)
     {
         self::_getInstance()->_fieldMapping = $fieldMapping;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getPrivateFields(): array
+    {
+        return self::_getInstance()->_privateFields;
+    }
+
+    /**
+     * @param array $privateFields
+     */
+    public static function setPrivateFields(array $privateFields)
+    {
+        self::_getInstance()->_privateFields = $privateFields;
     }
 
     /**
