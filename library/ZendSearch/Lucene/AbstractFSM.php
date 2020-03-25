@@ -29,7 +29,7 @@ abstract class AbstractFSM
      *
      * @var array
      */
-    private $_states = array();
+    private $_states = [];
 
     /**
      * Current state
@@ -43,7 +43,7 @@ abstract class AbstractFSM
      *
      * @var array
      */
-    private $_inputAphabet = array();
+    private $_inputAphabet = [];
 
     /**
      * State transition table
@@ -52,7 +52,7 @@ abstract class AbstractFSM
      *
      * @var array
      */
-    private $_rules = array();
+    private $_rules = [];
 
     /**
      * List of entry actions
@@ -62,7 +62,7 @@ abstract class AbstractFSM
      *
      * @var array
      */
-    private $_entryActions =  array();
+    private $_entryActions =  [];
 
     /**
      * List of exit actions
@@ -72,7 +72,7 @@ abstract class AbstractFSM
      *
      * @var array
      */
-    private $_exitActions =  array();
+    private $_exitActions =  [];
 
     /**
      * List of input actions
@@ -82,7 +82,7 @@ abstract class AbstractFSM
      *
      * @var array
      */
-    private $_inputActions =  array();
+    private $_inputActions =  [];
 
     /**
      * List of input actions
@@ -92,7 +92,7 @@ abstract class AbstractFSM
      *
      * @var array
      */
-    private $_transitionActions =  array();
+    private $_transitionActions =  [];
 
     /**
      * Finite State machine constructor
@@ -120,7 +120,7 @@ abstract class AbstractFSM
      * @param array $inputAphabet
      * @param array $rules
      */
-    public function __construct($states = array(), $inputAphabet = array(), $rules = array())
+    public function __construct($states = [], $inputAphabet = [], $rules = [])
     {
         $this->addStates($states);
         $this->addInputSymbols($inputAphabet);
@@ -244,7 +244,7 @@ abstract class AbstractFSM
         }
 
         if (!isset($this->_rules[$sourceState])) {
-            $this->_rules[$sourceState] = array();
+            $this->_rules[$sourceState] = [];
         }
         if (isset($this->_rules[$sourceState][$input])) {
             throw new Exception\RuntimeException('Rule for {state,input} pair (' . $sourceState . ', '. $input . ') is already defined.');
@@ -275,7 +275,7 @@ abstract class AbstractFSM
         }
 
         if (!isset($this->_entryActions[$state])) {
-            $this->_entryActions[$state] = array();
+            $this->_entryActions[$state] = [];
         }
 
         $this->_entryActions[$state][] = $action;
@@ -297,7 +297,7 @@ abstract class AbstractFSM
         }
 
         if (!isset($this->_exitActions[$state])) {
-            $this->_exitActions[$state] = array();
+            $this->_exitActions[$state] = [];
         }
 
         $this->_exitActions[$state][] = $action;
@@ -323,10 +323,10 @@ abstract class AbstractFSM
         }
 
         if (!isset($this->_inputActions[$state])) {
-            $this->_inputActions[$state] = array();
+            $this->_inputActions[$state] = [];
         }
         if (!isset($this->_inputActions[$state][$inputSymbol])) {
-            $this->_inputActions[$state][$inputSymbol] = array();
+            $this->_inputActions[$state][$inputSymbol] = [];
         }
 
         $this->_inputActions[$state][$inputSymbol][] = $action;
@@ -352,10 +352,10 @@ abstract class AbstractFSM
         }
 
         if (!isset($this->_transitionActions[$sourceState])) {
-            $this->_transitionActions[$sourceState] = array();
+            $this->_transitionActions[$sourceState] = [];
         }
         if (!isset($this->_transitionActions[$sourceState][$targetState])) {
-            $this->_transitionActions[$sourceState][$targetState] = array();
+            $this->_transitionActions[$sourceState][$targetState] = [];
         }
 
         $this->_transitionActions[$sourceState][$targetState][] = $action;

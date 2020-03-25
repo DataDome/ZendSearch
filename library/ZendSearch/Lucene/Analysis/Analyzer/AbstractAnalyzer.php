@@ -48,7 +48,7 @@ abstract class AbstractAnalyzer implements LuceneAnalyzer
     {
         $this->setInput($data, $encoding);
 
-        $tokenList = array();
+        $tokenList = [];
         while (($nextToken = $this->nextToken()) !== null) {
             $tokenList[] = $nextToken;
         }

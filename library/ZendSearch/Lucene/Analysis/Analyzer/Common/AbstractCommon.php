@@ -32,7 +32,7 @@ abstract class AbstractCommon extends Analysis\Analyzer\AbstractAnalyzer
      *
      * @var array
      */
-    private $_filters = array();
+    private $_filters = [];
 
     /**
      * Add Token filter to the AnalyzerInterface

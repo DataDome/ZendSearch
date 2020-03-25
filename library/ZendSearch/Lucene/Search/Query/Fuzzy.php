@@ -40,7 +40,7 @@ class Fuzzy extends AbstractQuery
      *
      * keys are integers representing a word size
      */
-    private $_maxDistances = array();
+    private $_maxDistances = [];
 
     /**
      * Base searching term.
@@ -170,15 +170,15 @@ class Fuzzy extends AbstractQuery
      */
     public function rewrite(Lucene\SearchIndexInterface $index)
     {
-        $this->_matches  = array();
-        $this->_scores   = array();
-        $this->_termKeys = array();
+        $this->_matches  = [];
+        $this->_scores   = [];
+        $this->_termKeys = [];
 
         if ($this->_term->field === null) {
             // Search through all fields
             $fields = $index->getFieldNames(true /* indexed fields list */);
         } else {
-            $fields = array($this->_term->field);
+            $fields = [$this->_term->field];
         }
 
         $prefix           = Index\Term::getPrefix($this->_term->text, $this->_prefixLength);
@@ -402,7 +402,7 @@ class Fuzzy extends AbstractQuery
      */
     protected function _highlightMatches(Highlighter $highlighter)
     {
-        $words = array();
+        $words = [];
 
         $prefix           = Index\Term::getPrefix($this->_term->text, $this->_prefixLength);
         $prefixByteLength = strlen($prefix);

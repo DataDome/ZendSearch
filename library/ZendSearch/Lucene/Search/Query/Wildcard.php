@@ -121,18 +121,18 @@ class Wildcard extends AbstractQuery
      */
     public function rewrite(Lucene\SearchIndexInterface $index)
     {
-        $this->_matches = array();
+        $this->_matches = [];
 
         if ($this->_pattern->field === null) {
             // Search through all fields
             $fields = $index->getFieldNames(true /* indexed fields list */);
         } else {
-            $fields = array($this->_pattern->field);
+            $fields = [$this->_pattern->field];
         }
 
         $prefix          = self::_getPrefix($this->_pattern->text);
         $prefixLength    = strlen($prefix);
-        $matchExpression = '/^' . str_replace(array('\\?', '\\*'), array('.', '.*') , preg_quote($this->_pattern->text, '/')) . '$/';
+        $matchExpression = '/^' . str_replace(['\\?', '\\*'], ['.', '.*'], preg_quote($this->_pattern->text, '/')) . '$/';
 
         if ($prefixLength < self::$_minPrefixLength) {
             throw new RuntimeException(
@@ -307,9 +307,9 @@ class Wildcard extends AbstractQuery
      */
     protected function _highlightMatches(Highlighter $highlighter)
     {
-        $words = array();
+        $words = [];
 
-        $matchExpression = '/^' . str_replace(array('\\?', '\\*'), array('.', '.*') , preg_quote($this->_pattern->text, '/')) . '$/';
+        $matchExpression = '/^' . str_replace(['\\?', '\\*'], ['.', '.*'], preg_quote($this->_pattern->text, '/')) . '$/';
         ErrorHandler::start(E_WARNING);
         $result = preg_match('/\pL/u', 'a');
         ErrorHandler::stop();

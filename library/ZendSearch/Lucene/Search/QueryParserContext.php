@@ -68,7 +68,7 @@ class QueryParserContext
      *
      * @var array
      */
-    private $_signs = array();
+    private $_signs = [];
 
     /**
      * Query entries
@@ -77,7 +77,7 @@ class QueryParserContext
      *
      * @var array
      */
-    private $_entries = array();
+    private $_entries = [];
 
     /**
      * Query string encoding
@@ -324,7 +324,7 @@ class QueryParserContext
         }
 
 
-        $subqueries = array();
+        $subqueries = [];
         foreach ($conjuctions as  $conjuction) {
             // Check, if it's a one term conjuction
             if (count($conjuction) == 1) {

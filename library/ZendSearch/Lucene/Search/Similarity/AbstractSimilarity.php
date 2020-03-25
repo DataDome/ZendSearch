@@ -34,7 +34,7 @@ abstract class AbstractSimilarity
      *
      * @var array
      */
-    private static $_normTable = array( 0   => 0.0,
+    private static $_normTable = [0   => 0.0,
                                         1   => 5.820766E-10,
                                         2   => 6.9849193E-10,
                                         3   => 8.1490725E-10,
@@ -289,7 +289,7 @@ abstract class AbstractSimilarity
                                         252 => 4.2949673E9,
                                         253 => 5.3687091E9,
                                         254 => 6.4424509E9,
-                                        255 => 7.5161928E9 );
+                                        255 => 7.5161928E9];
 
 
     /**

@@ -75,7 +75,7 @@ class Phrase extends AbstractQuery
      *
      * @var array
      */
-    private $_termsPositions = array();
+    private $_termsPositions = [];
 
     /**
      * Class constructor.  Create a new prase query.
@@ -90,13 +90,13 @@ class Phrase extends AbstractQuery
         $this->_slop = 0;
 
         if (is_array($terms)) {
-            $this->_terms = array();
+            $this->_terms = [];
             foreach ($terms as $termId => $termText) {
                 $this->_terms[$termId] = ($field !== null)? new Index\Term($termText, $field):
                                                             new Index\Term($termText);
             }
         } elseif ($terms === null) {
-            $this->_terms = array();
+            $this->_terms = [];
         } else {
             throw new InvalidArgumentException('terms argument must be array of strings or null');
         }
@@ -107,7 +107,7 @@ class Phrase extends AbstractQuery
             }
             $this->_offsets = $offsets;
         } elseif ($offsets === null) {
-            $this->_offsets = array();
+            $this->_offsets = [];
             foreach ($this->_terms as $termId => $term) {
                 $position = count($this->_offsets);
                 $this->_offsets[$termId] = $position;
@@ -322,8 +322,8 @@ class Phrase extends AbstractQuery
     {
         $freq = 0;
 
-        $phraseQueue = array();
-        $phraseQueue[0] = array(); // empty phrase
+        $phraseQueue = [];
+        $phraseQueue[0] = []; // empty phrase
         $lastTerm = null;
 
         // Walk through the terms to create phrases.
@@ -399,12 +399,12 @@ class Phrase extends AbstractQuery
         $this->_resVector = null;
 
         if (count($this->_terms) == 0) {
-            $this->_resVector = array();
+            $this->_resVector = [];
         }
 
-        $resVectors      = array();
-        $resVectorsSizes = array();
-        $resVectorsIds   = array(); // is used to prevent arrays comparison
+        $resVectors      = [];
+        $resVectorsSizes = [];
+        $resVectorsIds   = []; // is used to prevent arrays comparison
         foreach ($this->_terms as $termId => $term) {
             $resVectors[]      = array_flip($reader->termDocs($term));
             $resVectorsSizes[] = count(end($resVectors));
@@ -426,7 +426,7 @@ class Phrase extends AbstractQuery
                 /**
                  * This code is used as workaround for array_intersect_key() slowness problem.
                  */
-                $updatedVector = array();
+                $updatedVector = [];
                 foreach ($this->_resVector as $id => $value) {
                     if (isset($nextResVector[$id])) {
                         $updatedVector[$id] = $value;
@@ -508,7 +508,7 @@ class Phrase extends AbstractQuery
      */
     protected function _highlightMatches(Highlighter $highlighter)
     {
-        $words = array();
+        $words = [];
         foreach ($this->_terms as $term) {
             $words[] = $term->text;
         }

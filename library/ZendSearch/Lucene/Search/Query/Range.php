@@ -139,13 +139,13 @@ class Range extends AbstractQuery
      */
     public function rewrite(Lucene\SearchIndexInterface $index)
     {
-        $this->_matches = array();
+        $this->_matches = [];
 
         if ($this->_field === null) {
             // Search through all fields
             $fields = $index->getFieldNames(true /* indexed fields list */);
         } else {
-            $fields = array($this->_field);
+            $fields = [$this->_field];
         }
 
         $maxTerms = Lucene\Lucene::getTermsPerQueryLimit();
@@ -313,7 +313,7 @@ class Range extends AbstractQuery
      */
     protected function _highlightMatches(Highlighter $highlighter)
     {
-        $words = array();
+        $words = [];
 
         $docBody = $highlighter->getDocument()->getFieldUtf8Value('body');
         $tokens = Lucene\Analysis\Analyzer\Analyzer::getDefault()->tokenize($docBody, 'UTF-8');

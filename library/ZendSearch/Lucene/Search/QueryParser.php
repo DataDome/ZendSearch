@@ -157,49 +157,49 @@ class QueryParser extends Lucene\AbstractFSM
      */
     public function __construct()
     {
-        parent::__construct(array(self::ST_COMMON_QUERY_ELEMENT,
-                                  self::ST_CLOSEDINT_RQ_START,
-                                  self::ST_CLOSEDINT_RQ_FIRST_TERM,
-                                  self::ST_CLOSEDINT_RQ_TO_TERM,
-                                  self::ST_CLOSEDINT_RQ_LAST_TERM,
-                                  self::ST_CLOSEDINT_RQ_END,
-                                  self::ST_OPENEDINT_RQ_START,
-                                  self::ST_OPENEDINT_RQ_FIRST_TERM,
-                                  self::ST_OPENEDINT_RQ_TO_TERM,
-                                  self::ST_OPENEDINT_RQ_LAST_TERM,
-                                  self::ST_OPENEDINT_RQ_END
-                                 ),
-                            QueryToken::getTypes());
+        parent::__construct([
+                self::ST_COMMON_QUERY_ELEMENT,
+                self::ST_CLOSEDINT_RQ_START,
+                self::ST_CLOSEDINT_RQ_FIRST_TERM,
+                self::ST_CLOSEDINT_RQ_TO_TERM,
+                self::ST_CLOSEDINT_RQ_LAST_TERM,
+                self::ST_CLOSEDINT_RQ_END,
+                self::ST_OPENEDINT_RQ_START,
+                self::ST_OPENEDINT_RQ_FIRST_TERM,
+                self::ST_OPENEDINT_RQ_TO_TERM,
+                self::ST_OPENEDINT_RQ_LAST_TERM,
+                self::ST_OPENEDINT_RQ_END
+            ],
+            QueryToken::getTypes()
+        );
 
-        $this->addRules(
-             array(array(self::ST_COMMON_QUERY_ELEMENT, QueryToken::TT_WORD,             self::ST_COMMON_QUERY_ELEMENT),
-                   array(self::ST_COMMON_QUERY_ELEMENT, QueryToken::TT_PHRASE,           self::ST_COMMON_QUERY_ELEMENT),
-                   array(self::ST_COMMON_QUERY_ELEMENT, QueryToken::TT_FIELD,            self::ST_COMMON_QUERY_ELEMENT),
-                   array(self::ST_COMMON_QUERY_ELEMENT, QueryToken::TT_REQUIRED,         self::ST_COMMON_QUERY_ELEMENT),
-                   array(self::ST_COMMON_QUERY_ELEMENT, QueryToken::TT_PROHIBITED,       self::ST_COMMON_QUERY_ELEMENT),
-                   array(self::ST_COMMON_QUERY_ELEMENT, QueryToken::TT_FUZZY_PROX_MARK,  self::ST_COMMON_QUERY_ELEMENT),
-                   array(self::ST_COMMON_QUERY_ELEMENT, QueryToken::TT_BOOSTING_MARK,    self::ST_COMMON_QUERY_ELEMENT),
-                   array(self::ST_COMMON_QUERY_ELEMENT, QueryToken::TT_RANGE_INCL_START, self::ST_CLOSEDINT_RQ_START),
-                   array(self::ST_COMMON_QUERY_ELEMENT, QueryToken::TT_RANGE_EXCL_START, self::ST_OPENEDINT_RQ_START),
-                   array(self::ST_COMMON_QUERY_ELEMENT, QueryToken::TT_SUBQUERY_START,   self::ST_COMMON_QUERY_ELEMENT),
-                   array(self::ST_COMMON_QUERY_ELEMENT, QueryToken::TT_SUBQUERY_END,     self::ST_COMMON_QUERY_ELEMENT),
-                   array(self::ST_COMMON_QUERY_ELEMENT, QueryToken::TT_AND_LEXEME,       self::ST_COMMON_QUERY_ELEMENT),
-                   array(self::ST_COMMON_QUERY_ELEMENT, QueryToken::TT_OR_LEXEME,        self::ST_COMMON_QUERY_ELEMENT),
-                   array(self::ST_COMMON_QUERY_ELEMENT, QueryToken::TT_NOT_LEXEME,       self::ST_COMMON_QUERY_ELEMENT),
-                   array(self::ST_COMMON_QUERY_ELEMENT, QueryToken::TT_NUMBER,           self::ST_COMMON_QUERY_ELEMENT)
-                  ));
-        $this->addRules(
-             array(array(self::ST_CLOSEDINT_RQ_START,      QueryToken::TT_WORD,           self::ST_CLOSEDINT_RQ_FIRST_TERM),
-                   array(self::ST_CLOSEDINT_RQ_FIRST_TERM, QueryToken::TT_TO_LEXEME,      self::ST_CLOSEDINT_RQ_TO_TERM),
-                   array(self::ST_CLOSEDINT_RQ_TO_TERM,    QueryToken::TT_WORD,           self::ST_CLOSEDINT_RQ_LAST_TERM),
-                   array(self::ST_CLOSEDINT_RQ_LAST_TERM,  QueryToken::TT_RANGE_INCL_END, self::ST_COMMON_QUERY_ELEMENT)
-                  ));
-        $this->addRules(
-             array(array(self::ST_OPENEDINT_RQ_START,      QueryToken::TT_WORD,           self::ST_OPENEDINT_RQ_FIRST_TERM),
-                   array(self::ST_OPENEDINT_RQ_FIRST_TERM, QueryToken::TT_TO_LEXEME,      self::ST_OPENEDINT_RQ_TO_TERM),
-                   array(self::ST_OPENEDINT_RQ_TO_TERM,    QueryToken::TT_WORD,           self::ST_OPENEDINT_RQ_LAST_TERM),
-                   array(self::ST_OPENEDINT_RQ_LAST_TERM,  QueryToken::TT_RANGE_EXCL_END, self::ST_COMMON_QUERY_ELEMENT)
-                  ));
+        $this->addRules([
+            [self::ST_COMMON_QUERY_ELEMENT, QueryToken::TT_WORD,             self::ST_COMMON_QUERY_ELEMENT],
+            [self::ST_COMMON_QUERY_ELEMENT, QueryToken::TT_PHRASE,           self::ST_COMMON_QUERY_ELEMENT],
+            [self::ST_COMMON_QUERY_ELEMENT, QueryToken::TT_FIELD,            self::ST_COMMON_QUERY_ELEMENT],
+            [self::ST_COMMON_QUERY_ELEMENT, QueryToken::TT_REQUIRED,         self::ST_COMMON_QUERY_ELEMENT],
+            [self::ST_COMMON_QUERY_ELEMENT, QueryToken::TT_PROHIBITED,       self::ST_COMMON_QUERY_ELEMENT],
+            [self::ST_COMMON_QUERY_ELEMENT, QueryToken::TT_FUZZY_PROX_MARK,  self::ST_COMMON_QUERY_ELEMENT],
+            [self::ST_COMMON_QUERY_ELEMENT, QueryToken::TT_BOOSTING_MARK,    self::ST_COMMON_QUERY_ELEMENT],
+            [self::ST_COMMON_QUERY_ELEMENT, QueryToken::TT_RANGE_INCL_START, self::ST_CLOSEDINT_RQ_START],
+            [self::ST_COMMON_QUERY_ELEMENT, QueryToken::TT_RANGE_EXCL_START, self::ST_OPENEDINT_RQ_START],
+            [self::ST_COMMON_QUERY_ELEMENT, QueryToken::TT_SUBQUERY_START,   self::ST_COMMON_QUERY_ELEMENT],
+            [self::ST_COMMON_QUERY_ELEMENT, QueryToken::TT_SUBQUERY_END,     self::ST_COMMON_QUERY_ELEMENT],
+            [self::ST_COMMON_QUERY_ELEMENT, QueryToken::TT_AND_LEXEME,       self::ST_COMMON_QUERY_ELEMENT],
+            [self::ST_COMMON_QUERY_ELEMENT, QueryToken::TT_OR_LEXEME,        self::ST_COMMON_QUERY_ELEMENT],
+            [self::ST_COMMON_QUERY_ELEMENT, QueryToken::TT_NOT_LEXEME,       self::ST_COMMON_QUERY_ELEMENT],
+            [self::ST_COMMON_QUERY_ELEMENT, QueryToken::TT_NUMBER,           self::ST_COMMON_QUERY_ELEMENT],
+
+            [self::ST_CLOSEDINT_RQ_START,      QueryToken::TT_WORD,           self::ST_CLOSEDINT_RQ_FIRST_TERM],
+            [self::ST_CLOSEDINT_RQ_FIRST_TERM, QueryToken::TT_TO_LEXEME,      self::ST_CLOSEDINT_RQ_TO_TERM],
+            [self::ST_CLOSEDINT_RQ_TO_TERM,    QueryToken::TT_WORD,           self::ST_CLOSEDINT_RQ_LAST_TERM],
+            [self::ST_CLOSEDINT_RQ_LAST_TERM,  QueryToken::TT_RANGE_INCL_END, self::ST_COMMON_QUERY_ELEMENT],
+
+            [self::ST_OPENEDINT_RQ_START,      QueryToken::TT_WORD,           self::ST_OPENEDINT_RQ_FIRST_TERM],
+            [self::ST_OPENEDINT_RQ_FIRST_TERM, QueryToken::TT_TO_LEXEME,      self::ST_OPENEDINT_RQ_TO_TERM],
+            [self::ST_OPENEDINT_RQ_TO_TERM,    QueryToken::TT_WORD,           self::ST_OPENEDINT_RQ_LAST_TERM],
+            [self::ST_OPENEDINT_RQ_LAST_TERM,  QueryToken::TT_RANGE_EXCL_END, self::ST_COMMON_QUERY_ELEMENT]
+        ]);
 
 
 
@@ -333,9 +333,10 @@ class QueryParser extends Lucene\AbstractFSM
      *
      * @param string $strQuery
      * @param string $encoding
-     * @throws \ZendSearch\Lucene\Search\Exception\QueryParserException
-     * @throws \ZendSearch\Lucene\Exception\RuntimeException
+     *
      * @return \ZendSearch\Lucene\Search\Query\AbstractQuery
+     * @throws \ZendSearch\Lucene\Exception\RuntimeException*@throws \Exception
+     * @throws \ZendSearch\Lucene\Search\Exception\QueryParserException
      */
     public static function parse($strQuery, $encoding = null)
     {
@@ -348,7 +349,7 @@ class QueryParser extends Lucene\AbstractFSM
             self::$_instance->_encoding     = ($encoding !== null) ? $encoding : self::$_instance->_defaultEncoding;
             self::$_instance->_lastToken    = null;
             self::$_instance->_context      = new QueryParserContext(self::$_instance->_encoding);
-            self::$_instance->_contextStack = array();
+            self::$_instance->_contextStack = [];
             self::$_instance->_tokens       = self::$_instance->_lexer->tokenize($strQuery, self::$_instance->_encoding);
 
             // Empty query
@@ -357,6 +358,7 @@ class QueryParser extends Lucene\AbstractFSM
             }
 
             foreach (self::$_instance->_tokens as $token) {
+
                 try {
                     self::$_instance->_currentToken = $token;
                     self::$_instance->process($token->type);
@@ -377,6 +379,8 @@ class QueryParser extends Lucene\AbstractFSM
 
             return self::$_instance->_context->getQuery();
         } catch (QueryParserException $e) {
+
+            var_dump($e->getMessage().PHP_EOL.$e->getTraceAsString());die;
             if (self::$_instance->_suppressQueryParsingExceptions) {
                 $queryTokens = Analyzer\Analyzer::getDefault()->tokenize($strQuery, self::$_instance->_encoding);
 

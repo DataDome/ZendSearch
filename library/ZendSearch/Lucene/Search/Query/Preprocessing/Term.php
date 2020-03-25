@@ -84,7 +84,7 @@ class Term extends AbstractPreprocessing
             if (Lucene\Lucene::getDefaultSearchField() === null) {
                 $searchFields = $index->getFieldNames(true);
             } else {
-                $searchFields = array(Lucene\Lucene::getDefaultSearchField());
+                $searchFields = [Lucene\Lucene::getDefaultSearchField()];
             }
 
             foreach ($searchFields as $fieldName) {
@@ -102,7 +102,7 @@ class Term extends AbstractPreprocessing
             }
 
             if (count($query->getTerms()) == 0) {
-                $this->_matches = array();
+                $this->_matches = [];
                 if ($hasInsignificantSubqueries) {
                     return new Query\Insignificant();
                 } else {
@@ -186,7 +186,7 @@ class Term extends AbstractPreprocessing
         $tokens = Analyzer\Analyzer::getDefault()->tokenize($this->_word, $this->_encoding);
 
         if (count($tokens) == 0) {
-            $this->_matches = array();
+            $this->_matches = [];
             return new Query\Insignificant();
         }
 
@@ -291,7 +291,7 @@ class Term extends AbstractPreprocessing
         }
 
         //It's not insignificant or one term query
-        $words = array();
+        $words = [];
         foreach ($tokens as $token) {
             $words[] = $token->getTermText();
         }

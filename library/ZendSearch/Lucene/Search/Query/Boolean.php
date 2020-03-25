@@ -29,7 +29,7 @@ class Boolean extends AbstractQuery
      *
      * @var array
      */
-    private $_subqueries = array();
+    private $_subqueries = [];
 
     /**
      * Subqueries signs.
@@ -41,7 +41,7 @@ class Boolean extends AbstractQuery
      *
      * @var array
      */
-    private $_signs = array();
+    private $_signs = [];
 
     /**
      * Result vector.
@@ -106,7 +106,7 @@ class Boolean extends AbstractQuery
     {
         if ($sign !== true || $this->_signs !== null) {       // Skip, if all subqueries are required
             if ($this->_signs === null) {                     // Check, If all previous subqueries are required
-                $this->_signs = array();
+                $this->_signs = [];
                 foreach ($this->_subqueries as $prevSubquery) {
                     $this->_signs[] = true;
                 }
@@ -144,8 +144,8 @@ class Boolean extends AbstractQuery
      */
     public function optimize(Lucene\SearchIndexInterface $index)
     {
-        $subqueries = array();
-        $signs      = array();
+        $subqueries = [];
+        $signs      = [];
 
         // Optimize all subqueries
         foreach ($this->_subqueries as $id => $subquery) {
@@ -232,9 +232,9 @@ class Boolean extends AbstractQuery
         $optimizedQuery->setBoost($this->getBoost());
 
 
-        $terms        = array();
-        $tsigns       = array();
-        $boostFactors = array();
+        $terms        = [];
+        $tsigns       = [];
+        $boostFactors = [];
 
         // Try to decompose term and multi-term subqueries
         foreach ($subqueries as $id => $subquery) {
@@ -352,7 +352,7 @@ class Boolean extends AbstractQuery
         // several subqueries
 
         // Separate prohibited terms
-        $prohibitedTerms        = array();
+        $prohibitedTerms        = [];
         foreach ($terms as $id => $term) {
             if ($tsigns[$id] === false) {
                 $prohibitedTerms[]        = $term;
@@ -371,7 +371,7 @@ class Boolean extends AbstractQuery
             $signs[]      = reset($tsigns);
 
             // Clear terms list
-            $terms = array();
+            $terms = [];
         } elseif (count($terms) > 1  &&  count(array_unique($boostFactors)) == 1) {
             $clause = new MultiTerm($terms, $tsigns);
             $clause->setBoost(reset($boostFactors));
@@ -381,7 +381,7 @@ class Boolean extends AbstractQuery
             $signs[]      = (in_array(true, $tsigns))? true : null;
 
             // Clear terms list
-            $terms = array();
+            $terms = [];
         }
 
         if (count($prohibitedTerms) == 1) {
@@ -390,10 +390,10 @@ class Boolean extends AbstractQuery
             $signs[]      = false;
 
             // Clear prohibited terms list
-            $prohibitedTerms = array();
+            $prohibitedTerms = [];
         } elseif (count($prohibitedTerms) > 1) {
             // prepare signs array
-            $prohibitedSigns = array();
+            $prohibitedSigns = [];
             foreach ($prohibitedTerms as $id => $term) {
                 // all prohibited term are grouped as optional into multi-term query
                 $prohibitedSigns[$id] = null;
@@ -405,7 +405,7 @@ class Boolean extends AbstractQuery
             $signs[]      = false;
 
             // Clear terms list
-            $prohibitedTerms = array();
+            $prohibitedTerms = [];
         }
 
         /** @todo Group terms with the same boost factors together */
@@ -464,12 +464,12 @@ class Boolean extends AbstractQuery
         $this->_resVector = null;
 
         if (count($this->_subqueries) == 0) {
-            $this->_resVector = array();
+            $this->_resVector = [];
         }
 
-        $resVectors      = array();
-        $resVectorsSizes = array();
-        $resVectorsIds   = array(); // is used to prevent arrays comparison
+        $resVectors      = [];
+        $resVectorsSizes = [];
+        $resVectorsIds   = []; // is used to prevent arrays comparison
         foreach ($this->_subqueries as $subqueryId => $subquery) {
             $resVectors[]      = $subquery->matchedDocs();
             $resVectorsSizes[] = count(end($resVectors));
@@ -489,7 +489,7 @@ class Boolean extends AbstractQuery
                 /**
                  * This code is used as workaround for array_intersect_key() slowness problem.
                  */
-                $updatedVector = array();
+                $updatedVector = [];
                 foreach ($this->_resVector as $id => $value) {
                     if (isset($nextResVector[$id])) {
                         $updatedVector[$id] = $value;
@@ -515,11 +515,11 @@ class Boolean extends AbstractQuery
      */
     private function _calculateNonConjunctionResult()
     {
-        $requiredVectors      = array();
-        $requiredVectorsSizes = array();
-        $requiredVectorsIds   = array(); // is used to prevent arrays comparison
+        $requiredVectors      = [];
+        $requiredVectorsSizes = [];
+        $requiredVectorsIds   = []; // is used to prevent arrays comparison
 
-        $optional = array();
+        $optional = [];
 
         foreach ($this->_subqueries as $subqueryId => $subquery) {
             if ($this->_signs[$subqueryId] === true) {
@@ -554,7 +554,7 @@ class Boolean extends AbstractQuery
                 /**
                  * This code is used as workaround for array_intersect_key() slowness problem.
                  */
-                $updatedVector = array();
+                $updatedVector = [];
                 foreach ($required as $id => $value) {
                     if (isset($nextResVector[$id])) {
                         $updatedVector[$id] = $value;
@@ -620,7 +620,7 @@ class Boolean extends AbstractQuery
     public function _nonConjunctionScore($docId, Lucene\SearchIndexInterface $reader)
     {
         if ($this->_coord === null) {
-            $this->_coord = array();
+            $this->_coord = [];
 
             $maxCoord = 0;
             foreach ($this->_signs as $sign) {
@@ -732,7 +732,7 @@ class Boolean extends AbstractQuery
      */
     public function getQueryTerms()
     {
-        $terms = array();
+        $terms = [];
 
         foreach ($this->_subqueries as $id => $subquery) {
             if ($this->_signs === null  ||  $this->_signs[$id] !== false) {

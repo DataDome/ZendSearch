@@ -96,7 +96,7 @@ class Fuzzy extends AbstractPreprocessing
             if (Lucene\Lucene::getDefaultSearchField() === null) {
                 $searchFields = $index->getFieldNames(true);
             } else {
-                $searchFields = array(Lucene\Lucene::getDefaultSearchField());
+                $searchFields = [Lucene\Lucene::getDefaultSearchField()];
             }
 
             foreach ($searchFields as $fieldName) {
@@ -120,7 +120,7 @@ class Fuzzy extends AbstractPreprocessing
             $subqueries = $query->getSubqueries();
 
             if (count($subqueries) == 0) {
-                $this->_matches = array();
+                $this->_matches = [];
                 if ($hasInsignificantSubqueries) {
                     return new Query\Insignificant();
                 } else {
@@ -178,7 +178,7 @@ class Fuzzy extends AbstractPreprocessing
         $tokens = Analyzer\Analyzer::getDefault()->tokenize($this->_word, $this->_encoding);
 
         if (count($tokens) == 0) {
-            $this->_matches = array();
+            $this->_matches = [];
             return new Query\Insignificant();
         }
 

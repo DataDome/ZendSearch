@@ -26,7 +26,7 @@ spl_autoload_register(function ($class) {
         return false;
     }
     $normalized = str_replace('ZendSearchTest\\', '', $class);
-    $filename   = __DIR__ . '/ZendSearch/' . str_replace(array('\\', '_'), '/', $normalized) . '.php';
+    $filename   = __DIR__ . '/ZendSearch/' . str_replace(['\\', '_'], '/', $normalized) . '.php';
     if (!file_exists($filename)) {
         return false;
     }

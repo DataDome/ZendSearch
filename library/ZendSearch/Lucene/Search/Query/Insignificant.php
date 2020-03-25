@@ -77,7 +77,7 @@ class Insignificant extends AbstractQuery
      */
     public function matchedDocs()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -99,7 +99,7 @@ class Insignificant extends AbstractQuery
      */
     public function getQueryTerms()
     {
-        return array();
+        return [];
     }
 
     /**

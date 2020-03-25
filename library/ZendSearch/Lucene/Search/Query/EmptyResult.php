@@ -76,7 +76,7 @@ class EmptyResult extends AbstractQuery
      */
     public function matchedDocs()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -98,7 +98,7 @@ class EmptyResult extends AbstractQuery
      */
     public function getQueryTerms()
     {
-        return array();
+        return [];
     }
 
     /**

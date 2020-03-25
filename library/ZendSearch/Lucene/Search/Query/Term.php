@@ -163,7 +163,7 @@ class Term extends AbstractQuery
      */
     public function getQueryTerms()
     {
-        return array($this->_term);
+        return [$this->_term];
     }
 
     /**

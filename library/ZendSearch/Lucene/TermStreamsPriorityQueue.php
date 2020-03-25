@@ -79,7 +79,7 @@ class TermStreamsPriorityQueue implements Index\TermsStreamInterface
      */
     public function skipTo(Index\Term $prefix)
     {
-        $termStreams = array();
+        $termStreams = [];
 
         while (($termStream = $this->_termsStreamQueue->pop()) !== null) {
             $termStreams[] = $termStream;
