@@ -95,7 +95,7 @@ class QueryParser extends Lucene\AbstractFSM
      *
      * @var string
      */
-    private $_defaultEncoding = '';
+    private $_defaultEncoding = 'UTF-8';
 
 
     private $_fieldMapping = [];
@@ -356,7 +356,6 @@ class QueryParser extends Lucene\AbstractFSM
                 return new Query\Insignificant();
             }
 
-
             foreach (self::$_instance->_tokens as $token) {
                 try {
                     self::$_instance->_currentToken = $token;
@@ -368,7 +367,7 @@ class QueryParser extends Lucene\AbstractFSM
                         throw new QueryParserException( 'Syntax error at char position ' . $token->position . '.', 0, $e);
                     }
 
-                    throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
+                    throw $e;
                 }
             }
 

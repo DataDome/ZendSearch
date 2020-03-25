@@ -10,6 +10,7 @@
 
 namespace ZendSearchTest\Lucene\Index;
 
+use PHPUnit\Framework\TestCase;
 use ZendSearch\Lucene\Index;
 
 /**
@@ -18,7 +19,7 @@ use ZendSearch\Lucene\Index;
  * @subpackage UnitTests
  * @group      Zend_Search_Lucene
  */
-class TermTest extends \PHPUnit_Framework_TestCase
+class TermTest extends TestCase
 {
     public function testCreate()
     {

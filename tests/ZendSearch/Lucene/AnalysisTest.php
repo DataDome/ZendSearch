@@ -17,6 +17,7 @@ use ZendSearch\Lucene\Analysis\Analyzer\Common\Text;
 use ZendSearch\Lucene\Analysis\Analyzer\Common\TextNum;
 use ZendSearch\Lucene\Analysis\Analyzer\Common\Utf8;
 use ZendSearch\Lucene\Analysis\Analyzer\Common\Utf8Num;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @category   Zend
@@ -24,7 +25,7 @@ use ZendSearch\Lucene\Analysis\Analyzer\Common\Utf8Num;
  * @subpackage UnitTests
  * @group      Zend_Search_Lucene
  */
-class AnalysisTest extends \PHPUnit_Framework_TestCase
+class AnalysisTest extends TestCase
 {
     public function testAnalyzer()
     {
