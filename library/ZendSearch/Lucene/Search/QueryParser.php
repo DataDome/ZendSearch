@@ -414,7 +414,7 @@ class QueryParser extends Lucene\AbstractFSM
         }
         $this->validateField($field);
 
-        $entry = new QueryEntry\Term($this->_currentToken->text, $field ? $this->_fieldMapping[$field] : $field);
+        $entry = new QueryEntry\Term($this->_currentToken->text, $this->mapFieldName($field));
         $this->_context->addEntry($entry);
     }
 
@@ -432,7 +432,7 @@ class QueryParser extends Lucene\AbstractFSM
 
         $this->validateField($field);
 
-        $entry = new QueryEntry\Phrase($this->_currentToken->text, $field ?  $this->_fieldMapping[$field] : $field);
+        $entry = new QueryEntry\Phrase($this->_currentToken->text, $this->mapFieldName($field));
         $this->_context->addEntry($entry);
     }
 
@@ -564,8 +564,8 @@ class QueryParser extends Lucene\AbstractFSM
 
         $this->validateField($from->field);
         $this->validateField($to->field);
-        $from->field = $from->field ? $this->_fieldMapping[$from->field] : $from->field;
-        $to->field   = $to->field   ? $this->_fieldMapping[$to->field]   : $to->field;
+        $from->field = $this->mapFieldName($from->field);
+        $to->field   = $this->mapFieldName($to->field);
 
         $rangeQuery = new Query\Range($from, $to, false);
         $entry      = new QueryEntry\Subquery($rangeQuery);
@@ -583,6 +583,14 @@ class QueryParser extends Lucene\AbstractFSM
             throw new QueryParserException("Field $field is not authorized. Authorized fields are: $authorizedFields.");
         }
         return true;
+    }
+
+    private function mapFieldName($fieldName)
+    {
+        if ($fieldName && array_key_exists($fieldName, $this->_fieldMapping)) {
+           return $this->_fieldMapping[$fieldName];
+        }
+        return $fieldName;
     }
 
     /**
@@ -628,13 +636,15 @@ class QueryParser extends Lucene\AbstractFSM
 
         $this->validateField($from->field);
         $this->validateField($to->field);
-        $from->field = $from->field ? $this->_fieldMapping[$from->field] : $from->field;
-        $to->field   = $to->field   ? $this->_fieldMapping[$to->field]   : $to->field;
+        $from->field = $this->mapFieldName($from->field);
+        $to->field   = $this->mapFieldName($to->field);
 
         $rangeQuery = new Query\Range($from, $to, true);
         $entry      = new QueryEntry\Subquery($rangeQuery);
         $this->_context->addEntry($entry);
     }
+
+
 
     /**
      * @return array

@@ -84,7 +84,6 @@ class Range extends AbstractQuery
         if ($lowerTerm !== null  &&  $upperTerm !== null  &&  $lowerTerm->field != $upperTerm->field) {
             throw new InvalidArgumentException('Both terms must be for the same field');
         }
-
         $this->_field     = ($lowerTerm !== null)? $lowerTerm->field : $upperTerm->field;
         $this->_lowerTerm = $lowerTerm;
         $this->_upperTerm = $upperTerm;

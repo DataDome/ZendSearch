@@ -3,8 +3,10 @@
         <testsuite name="ZendSearch Test Suite">
             <directory>./ZendSearch</directory>
         </testsuite>
+        <testsuite name="SearchOnly">
+            <file>./ZendSearch/Lucene/SearchTest.php</file>
+        </testsuite>
     </testsuites>
-
     <groups>
         <exclude>
             <group>disable</group>

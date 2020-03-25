@@ -641,7 +641,6 @@ class MultiTerm extends AbstractQuery
         if ($this->getBoost() != 1) {
             $query = '(' . $query . ')^' . round($this->getBoost(), 4);
         }
-
         return $query;
     }
 }
