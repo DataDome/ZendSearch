@@ -332,7 +332,7 @@ class QueryLexer extends Lucene\AbstractFSM
         $inputString .= ' ';
 
         for ($count = 0; $count < $strLength; $count++) {
-            $this->_queryString[$count] = iconv_substr($inputString, $count, 1, $encoding);
+            $this->_queryString[$count] = mb_substr($inputString, $count, 1, $encoding);
         }
 
         for ($this->_queryStringPosition = 0;

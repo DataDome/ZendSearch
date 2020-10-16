@@ -21,6 +21,7 @@
     ],
     "require": {
         "php": ">=7",
-        "zendframework/zend-stdlib": "3.*"
+        "zendframework/zend-stdlib": "3.*",
+        "ext-mbstring": "*"
     }
 }
