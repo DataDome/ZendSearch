@@ -11,6 +11,7 @@
 namespace ZendSearch\Lucene\Search;
 
 use ZendSearch\Lucene;
+use ZendSearch\Lucene\Exception\InvalidArgumentException;
 
 /**
  * @category   Zend
@@ -111,7 +112,7 @@ class QueryToken
      * @param integer $tokenCategory
      * @param string  $tokText
      * @param integer $position
-     * @throws \ZendSearch\Lucene\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct($tokenCategory, $tokenText, $position)
     {
@@ -200,7 +201,7 @@ class QueryToken
                         break;
 
                     default:
-                        throw new Lucene\Exception\InvalidArgumentException(
+                        throw new InvalidArgumentException(
                             'Unrecognized query syntax lexeme: \'' . $tokenText . '\''
                         );
                 }
@@ -210,7 +211,7 @@ class QueryToken
                 $this->type = self::TT_NUMBER;
 
             default:
-                throw new Lucene\Exception\InvalidArgumentException(
+                throw new InvalidArgumentException(
                     'Unrecognized lexeme type: \'' . $tokenCategory . '\''
                 );
         }

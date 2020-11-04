@@ -3,14 +3,11 @@
     "description": "a general purpose text search engine written entirely in PHP 5",
     "type": "library",
     "license": "BSD-3-Clause",
-    "keywords": [
-        "zf2",
-        "lucene"
-    ],
     "homepage": "https://packages.zendframework.com/",
     "autoload": {
         "psr-0": {
-            "ZendSearch": "library/"
+            "ZendSearch": "library/",
+            "ZendSearchTest": "tests/ZendSearch/"
         }
     },
     "repositories": [
@@ -21,7 +18,8 @@
     ],
     "require": {
         "php": ">=7.1",
-        "laminas/laminas-stdlib": "3.*"
+        "laminas/laminas-stdlib": "3.*",
+        "ext-iconv": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.0"

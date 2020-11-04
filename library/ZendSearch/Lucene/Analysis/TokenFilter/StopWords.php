@@ -46,8 +46,9 @@ class StopWords implements TokenFilterInterface
     /**
      * Normalize Token or remove it (if null is returned)
      *
-     * @param \ZendSearch\Lucene\Analysis\Token $srcToken
-     * @return \ZendSearch\Lucene\Analysis\Token
+     * @param Token $srcToken
+     *
+     * @return Token
      */
     public function normalize(Token $srcToken)
     {
@@ -65,8 +66,9 @@ class StopWords implements TokenFilterInterface
      * You can call this method one or more times. New stopwords are always added to current set.
      *
      * @param string $filepath full path for text file with stopwords
-     * @throws \ZendSearch\Lucene\Exception\InvalidArgumentException
-     * @throws \ZendSearch\Lucene\Exception\RuntimeException
+     *
+     * @throws InvalidArgumentException
+     * @throws RuntimeException
      */
     public function loadFromFile($filepath = null)
     {

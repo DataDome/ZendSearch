@@ -11,6 +11,7 @@
 namespace ZendSearch\Lucene\Analysis\Analyzer\Common;
 
 use ZendSearch\Lucene\Analysis;
+use ZendSearch\Lucene\Analysis\Token;
 
 /**
  * @category   Zend
@@ -49,7 +50,7 @@ class Text extends AbstractCommon
      * Get next token
      * Returns null at the end of stream
      *
-     * @return \ZendSearch\Lucene\Analysis\Token|null
+     * @return Token|null
      */
     public function nextToken()
     {
@@ -71,7 +72,7 @@ class Text extends AbstractCommon
 
             $this->_position = $endpos;
 
-            $token = $this->normalize(new Analysis\Token($str, $pos, $endpos));
+            $token = $this->normalize(new Token($str, $pos, $endpos));
         } while ($token === null); // try again if token is skipped
 
         return $token;

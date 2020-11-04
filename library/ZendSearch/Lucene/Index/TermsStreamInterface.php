@@ -27,21 +27,21 @@ interface TermsStreamInterface
      *
      * Prefix contains fully specified field info and portion of searched term
      *
-     * @param \ZendSearch\Lucene\Index\Term $prefix
+     * @param Term $prefix
      */
     public function skipTo(Term $prefix);
 
     /**
      * Scans terms dictionary and returns next term
      *
-     * @return \ZendSearch\Lucene\Index\Term|null
+     * @return Term|null
      */
     public function nextTerm();
 
     /**
      * Returns term in current position
      *
-     * @return \ZendSearch\Lucene\Index\Term|null
+     * @return Term|null
      */
     public function currentTerm();
 

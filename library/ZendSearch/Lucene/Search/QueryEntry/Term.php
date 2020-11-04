@@ -10,6 +10,10 @@
 
 namespace ZendSearch\Lucene\Search\QueryEntry;
 
+use ZendSearch\Lucene\Search\Exception\QueryParserException;
+use ZendSearch\Lucene\Search\Query\AbstractQuery;
+use ZendSearch\Lucene\Search\Query\Preprocessing\Fuzzy;
+
 /**
  * @category   Zend
  * @package    Zend_Search_Lucene
@@ -79,13 +83,13 @@ class Term extends AbstractQueryEntry
      * Transform entry to a subquery
      *
      * @param string $encoding
-     * @return \ZendSearch\Lucene\Search\Query\AbstractQuery
-     * @throws \ZendSearch\Lucene\Search\Exception\QueryParserException
+     * @return AbstractQuery
+     * @throws QueryParserException
      */
     public function getQuery($encoding)
     {
         if ($this->_fuzzyQuery) {
-            $query = new \ZendSearch\Lucene\Search\Query\Preprocessing\Fuzzy($this->_term,
+            $query = new Fuzzy($this->_term,
                                                                              $encoding,
                                                                              ($this->_field !== null)?
                                                                                   iconv($encoding, 'UTF-8', $this->_field) :

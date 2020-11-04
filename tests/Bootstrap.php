@@ -11,11 +11,14 @@
 /*
  * Set error reporting to the level to which Zend Framework code must comply.
  */
-error_reporting( E_ALL | E_STRICT );
 
-$phpUnitVersion = \PHPUnit\Runner\Version::id();
+use PHPUnit\Runner\Version;
+
+error_reporting(E_ALL | E_STRICT );
+
+$phpUnitVersion = Version::id();
 if ('@package_version@' !== $phpUnitVersion && version_compare($phpUnitVersion, '3.5.0', '<')) {
-    echo 'This version of PHPUnit (' . \PHPUnit\Runner\Version::id() . ') is not supported in Zend Framework 2.x unit tests.' . PHP_EOL;
+    echo 'This version of PHPUnit (' . Version::id() . ') is not supported in Zend Framework 2.x unit tests.' . PHP_EOL;
     exit(1);
 }
 unset($phpUnitVersion);

@@ -11,6 +11,7 @@
 namespace ZendSearch\Lucene\Search\Highlighter;
 
 use ZendSearch\Lucene\Document;
+use ZendSearch\Lucene\Document\HTML;
 
 /**
  * @category   Zend
@@ -42,16 +43,16 @@ class DefaultHighlighter implements HighlighterInterface
     /**
      * HTML document for highlighting
      *
-     * @var \ZendSearch\Lucene\Document\HTML
+     * @var HTML
      */
     protected $_doc;
 
     /**
      * Set document for highlighting.
      *
-     * @param \ZendSearch\Lucene\Document\HTML $document
+     * @param HTML $document
      */
-    public function setDocument(Document\HTML $document)
+    public function setDocument(HTML $document)
     {
         $this->_doc = $document;
     }
@@ -59,7 +60,7 @@ class DefaultHighlighter implements HighlighterInterface
     /**
      * Get document for highlighting.
      *
-     * @return \ZendSearch\Lucene\Document\HTML $document
+     * @return HTML $document
      */
     public function getDocument()
     {

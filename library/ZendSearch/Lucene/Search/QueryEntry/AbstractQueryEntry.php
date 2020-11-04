@@ -10,6 +10,8 @@
 
 namespace ZendSearch\Lucene\Search\QueryEntry;
 
+use ZendSearch\Lucene\Search\Query\AbstractQuery;
+
 /**
  * @category   Zend
  * @package    Zend_Search_Lucene
@@ -37,7 +39,7 @@ abstract class AbstractQueryEntry
      * Transform entry to a subquery
      *
      * @param string $encoding
-     * @return \ZendSearch\Lucene\Search\Query\AbstractQuery
+     * @return AbstractQuery
      */
     abstract public function getQuery($encoding);
 

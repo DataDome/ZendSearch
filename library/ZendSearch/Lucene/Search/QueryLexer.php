@@ -313,8 +313,9 @@ class QueryLexer extends Lucene\AbstractFSM
      *
      * @param string $inputString
      * @param string $encoding
+     *
      * @return array
-     * @throws \ZendSearch\Lucene\Search\Exception\QueryParserException
+     * @throws QueryParserException
      */
     public function tokenize($inputString, $encoding)
     {
@@ -363,7 +364,7 @@ class QueryLexer extends Lucene\AbstractFSM
     /**
      * Add query syntax lexeme
      *
-     * @throws \ZendSearch\Lucene\Search\Exception\QueryParserException
+     * @throws QueryParserException
      */
     public function addQuerySyntaxLexeme()
     {

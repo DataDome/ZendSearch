@@ -10,6 +10,9 @@
 
 namespace ZendSearch\Lucene;
 
+use ZendSearch\Lucene\Exception\InvalidArgumentException;
+use ZendSearch\Lucene\Exception\RuntimeException;
+
 /**
  * Abstract Finite State Machine
  *
@@ -158,7 +161,7 @@ abstract class AbstractFSM
      * No any action is invoked
      *
      * @param integer|string $state
-     * @throws \ZendSearch\Lucene\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function setState($state)
     {
@@ -227,9 +230,10 @@ abstract class AbstractFSM
      * @param integer|string $sourceState
      * @param integer|string $input
      * @param integer|string $targetState
-     * @param \ZendSearch\Lucene\FSMAction|null $inputAction
-     * @throws \ZendSearch\Lucene\Exception\InvalidArgumentException
-     * @throws \ZendSearch\Lucene\Exception\RuntimeException
+     * @param FSMAction|null $inputAction
+     *
+     * @throws InvalidArgumentException
+     * @throws RuntimeException
      */
     public function addRule($sourceState, $input, $targetState, $inputAction = null)
     {
@@ -265,8 +269,9 @@ abstract class AbstractFSM
      * Action execution order is defined by addEntryAction() calls
      *
      * @param integer|string $state
-     * @param \ZendSearch\Lucene\FSMAction $action
-     * @throws \ZendSearch\Lucene\Exception\InvalidArgumentException
+     * @param FSMAction $action
+     *
+     * @throws InvalidArgumentException
      */
     public function addEntryAction($state, FSMAction $action)
     {
@@ -287,8 +292,9 @@ abstract class AbstractFSM
      * Action execution order is defined by addEntryAction() calls
      *
      * @param integer|string $state
-     * @param \ZendSearch\Lucene\FSMAction $action
-     * @throws \ZendSearch\Lucene\Exception\InvalidArgumentException
+     * @param FSMAction $action
+     *
+     * @throws InvalidArgumentException
      */
     public function addExitAction($state, FSMAction $action)
     {
@@ -310,8 +316,9 @@ abstract class AbstractFSM
      *
      * @param integer|string $state
      * @param integer|string $input
-     * @param \ZendSearch\Lucene\FSMAction $action
-     * @throws \ZendSearch\Lucene\Exception\InvalidArgumentException
+     * @param FSMAction $action
+     *
+     * @throws InvalidArgumentException
      */
     public function addInputAction($state, $inputSymbol, FSMAction $action)
     {
@@ -339,8 +346,9 @@ abstract class AbstractFSM
      *
      * @param integer|string $sourceState
      * @param integer|string $targetState
-     * @param \ZendSearch\Lucene\FSMAction $action
-     * @throws \ZendSearch\Lucene\Exception\InvalidArgumentException
+     * @param FSMAction $action
+     *
+     * @throws InvalidArgumentException
      */
     public function addTransitionAction($sourceState, $targetState, FSMAction $action)
     {
@@ -366,8 +374,8 @@ abstract class AbstractFSM
      * Process an input
      *
      * @param mixed $input
-     * @throws \ZendSearch\Lucene\Exception\RuntimeException
-     * @throws \ZendSearch\Lucene\Exception\InvalidArgumentException
+     * @throws RuntimeException
+     * @throws InvalidArgumentException
      */
     public function process($input)
     {
@@ -410,7 +418,7 @@ abstract class AbstractFSM
     }
 
     /**
-     * @throws \ZendSearch\Lucene\Exception\RuntimeException
+     * @throws RuntimeException
      */
     public function reset()
     {

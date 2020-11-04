@@ -18,6 +18,8 @@ use ZendSearch\Lucene\Analysis\Analyzer\Common\TextNum;
 use ZendSearch\Lucene\Analysis\Analyzer\Common\Utf8;
 use ZendSearch\Lucene\Analysis\Analyzer\Common\Utf8Num;
 use PHPUnit\Framework\TestCase;
+use ZendSearch\Lucene\Analysis\TokenFilter\ShortWords;
+use ZendSearch\Lucene\Analysis\TokenFilter\StopWords;
 
 /**
  * @category   Zend
@@ -36,7 +38,7 @@ class AnalysisTest extends TestCase
 
         $newAnalyzer = new Common\Utf8Num();
         Analyzer::setDefault($newAnalyzer);
-        $this->assertTrue(Analyzer::getDefault() === $newAnalyzer);
+        $this->assertSame(Analyzer::getDefault(), $newAnalyzer);
 
         // Set analyzer to the default value (used in other tests)
         Analyzer::setDefault($currentAnalyzer);
@@ -50,22 +52,22 @@ class AnalysisTest extends TestCase
 
         $tokenList = $analyzer->tokenize('Word1 Word2 anotherWord');
 
-        $this->assertEquals(count($tokenList), 3);
+        $this->assertCount(3, $tokenList);
 
-        $this->assertEquals($tokenList[0]->getTermText(),         'Word');
-        $this->assertEquals($tokenList[0]->getStartOffset(),       0);
-        $this->assertEquals($tokenList[0]->getEndOffset(),         4);
-        $this->assertEquals($tokenList[0]->getPositionIncrement(), 1);
+        $this->assertEquals('Word', $tokenList[0]->getTermText());
+        $this->assertEquals(0, $tokenList[0]->getStartOffset());
+        $this->assertEquals(4, $tokenList[0]->getEndOffset());
+        $this->assertEquals(1, $tokenList[0]->getPositionIncrement());
 
-        $this->assertEquals($tokenList[1]->getTermText(),         'Word');
-        $this->assertEquals($tokenList[1]->getStartOffset(),       6);
-        $this->assertEquals($tokenList[1]->getEndOffset(),         10);
-        $this->assertEquals($tokenList[1]->getPositionIncrement(), 1);
+        $this->assertEquals('Word', $tokenList[1]->getTermText());
+        $this->assertEquals(6, $tokenList[1]->getStartOffset());
+        $this->assertEquals(10, $tokenList[1]->getEndOffset());
+        $this->assertEquals(1, $tokenList[1]->getPositionIncrement());
 
-        $this->assertEquals($tokenList[2]->getTermText(),         'anotherWord');
-        $this->assertEquals($tokenList[2]->getStartOffset(),       12);
-        $this->assertEquals($tokenList[2]->getEndOffset(),         23);
-        $this->assertEquals($tokenList[2]->getPositionIncrement(), 1);
+        $this->assertEquals('anotherWord', $tokenList[2]->getTermText());
+        $this->assertEquals(12, $tokenList[2]->getStartOffset());
+        $this->assertEquals(23, $tokenList[2]->getEndOffset());
+        $this->assertEquals(1, $tokenList[2]->getPositionIncrement());
     }
 
     public function testTextCaseInsensitive()
@@ -76,22 +78,22 @@ class AnalysisTest extends TestCase
 
         $tokenList = $analyzer->tokenize('Word1 Word2 anotherWord');
 
-        $this->assertEquals(count($tokenList), 3);
+        $this->assertCount(3, $tokenList);
 
-        $this->assertEquals($tokenList[0]->getTermText(),         'word');
-        $this->assertEquals($tokenList[0]->getStartOffset(),       0);
-        $this->assertEquals($tokenList[0]->getEndOffset(),         4);
-        $this->assertEquals($tokenList[0]->getPositionIncrement(), 1);
+        $this->assertEquals('word', $tokenList[0]->getTermText());
+        $this->assertEquals(0, $tokenList[0]->getStartOffset());
+        $this->assertEquals(4, $tokenList[0]->getEndOffset());
+        $this->assertEquals(1, $tokenList[0]->getPositionIncrement());
 
-        $this->assertEquals($tokenList[1]->getTermText(),         'word');
-        $this->assertEquals($tokenList[1]->getStartOffset(),       6);
-        $this->assertEquals($tokenList[1]->getEndOffset(),         10);
-        $this->assertEquals($tokenList[1]->getPositionIncrement(), 1);
+        $this->assertEquals('word', $tokenList[1]->getTermText());
+        $this->assertEquals(6, $tokenList[1]->getStartOffset());
+        $this->assertEquals(10, $tokenList[1]->getEndOffset());
+        $this->assertEquals(1, $tokenList[1]->getPositionIncrement());
 
-        $this->assertEquals($tokenList[2]->getTermText(),         'anotherword');
-        $this->assertEquals($tokenList[2]->getStartOffset(),       12);
-        $this->assertEquals($tokenList[2]->getEndOffset(),         23);
-        $this->assertEquals($tokenList[2]->getPositionIncrement(), 1);
+        $this->assertEquals('anotherword', $tokenList[2]->getTermText());
+        $this->assertEquals(12, $tokenList[2]->getStartOffset());
+        $this->assertEquals(23, $tokenList[2]->getEndOffset());
+        $this->assertEquals(1, $tokenList[2]->getPositionIncrement());
     }
 
     public function testTextNum()
@@ -102,22 +104,22 @@ class AnalysisTest extends TestCase
 
         $tokenList = $analyzer->tokenize('Word1 Word2 anotherWord');
 
-        $this->assertEquals(count($tokenList), 3);
+        $this->assertCount(3, $tokenList);
 
-        $this->assertEquals($tokenList[0]->getTermText(),         'Word1');
-        $this->assertEquals($tokenList[0]->getStartOffset(),       0);
-        $this->assertEquals($tokenList[0]->getEndOffset(),         5);
-        $this->assertEquals($tokenList[0]->getPositionIncrement(), 1);
+        $this->assertEquals('Word1', $tokenList[0]->getTermText());
+        $this->assertEquals(0, $tokenList[0]->getStartOffset());
+        $this->assertEquals(5, $tokenList[0]->getEndOffset());
+        $this->assertEquals(1, $tokenList[0]->getPositionIncrement());
 
-        $this->assertEquals($tokenList[1]->getTermText(),         'Word2');
-        $this->assertEquals($tokenList[1]->getStartOffset(),       6);
-        $this->assertEquals($tokenList[1]->getEndOffset(),         11);
-        $this->assertEquals($tokenList[1]->getPositionIncrement(), 1);
+        $this->assertEquals('Word2', $tokenList[1]->getTermText());
+        $this->assertEquals(6, $tokenList[1]->getStartOffset());
+        $this->assertEquals(11, $tokenList[1]->getEndOffset());
+        $this->assertEquals(1, $tokenList[1]->getPositionIncrement());
 
-        $this->assertEquals($tokenList[2]->getTermText(),         'anotherWord');
-        $this->assertEquals($tokenList[2]->getStartOffset(),       12);
-        $this->assertEquals($tokenList[2]->getEndOffset(),         23);
-        $this->assertEquals($tokenList[2]->getPositionIncrement(), 1);
+        $this->assertEquals('anotherWord', $tokenList[2]->getTermText());
+        $this->assertEquals(12, $tokenList[2]->getStartOffset());
+        $this->assertEquals(23, $tokenList[2]->getEndOffset());
+        $this->assertEquals(1, $tokenList[2]->getPositionIncrement());
     }
 
     public function testTextNumCaseInsensitive()
@@ -128,22 +130,22 @@ class AnalysisTest extends TestCase
 
         $tokenList = $analyzer->tokenize('Word1 Word2 anotherWord');
 
-        $this->assertEquals(count($tokenList), 3);
+        $this->assertCount(3, $tokenList);
 
-        $this->assertEquals($tokenList[0]->getTermText(),         'word1');
-        $this->assertEquals($tokenList[0]->getStartOffset(),       0);
-        $this->assertEquals($tokenList[0]->getEndOffset(),         5);
-        $this->assertEquals($tokenList[0]->getPositionIncrement(), 1);
+        $this->assertEquals('word1', $tokenList[0]->getTermText());
+        $this->assertEquals(0, $tokenList[0]->getStartOffset());
+        $this->assertEquals(5, $tokenList[0]->getEndOffset());
+        $this->assertEquals(1, $tokenList[0]->getPositionIncrement());
 
-        $this->assertEquals($tokenList[1]->getTermText(),         'word2');
-        $this->assertEquals($tokenList[1]->getStartOffset(),       6);
-        $this->assertEquals($tokenList[1]->getEndOffset(),         11);
-        $this->assertEquals($tokenList[1]->getPositionIncrement(), 1);
+        $this->assertEquals('word2', $tokenList[1]->getTermText());
+        $this->assertEquals(6, $tokenList[1]->getStartOffset());
+        $this->assertEquals(11, $tokenList[1]->getEndOffset());
+        $this->assertEquals(1, $tokenList[1]->getPositionIncrement());
 
-        $this->assertEquals($tokenList[2]->getTermText(),         'anotherword');
-        $this->assertEquals($tokenList[2]->getStartOffset(),       12);
-        $this->assertEquals($tokenList[2]->getEndOffset(),         23);
-        $this->assertEquals($tokenList[2]->getPositionIncrement(), 1);
+        $this->assertEquals('anotherword', $tokenList[2]->getTermText());
+        $this->assertEquals(12, $tokenList[2]->getStartOffset());
+        $this->assertEquals(23, $tokenList[2]->getEndOffset());
+        $this->assertEquals(1, $tokenList[2]->getPositionIncrement());
     }
 
     public function testUtf8()
@@ -160,22 +162,22 @@ class AnalysisTest extends TestCase
         // UTF-8 text with a cyrillic symbols
         $tokenList = $analyzer->tokenize('Слово1 Слово2 ДругоеСлово', 'UTF-8');
 
-        $this->assertEquals(count($tokenList), 3);
+        $this->assertCount(3, $tokenList);
 
-        $this->assertEquals($tokenList[0]->getTermText(),         'Слово');
-        $this->assertEquals($tokenList[0]->getStartOffset(),       0);
-        $this->assertEquals($tokenList[0]->getEndOffset(),         5);
-        $this->assertEquals($tokenList[0]->getPositionIncrement(), 1);
+        $this->assertEquals('Слово', $tokenList[0]->getTermText());
+        $this->assertEquals(0, $tokenList[0]->getStartOffset());
+        $this->assertEquals(5, $tokenList[0]->getEndOffset());
+        $this->assertEquals(1, $tokenList[0]->getPositionIncrement());
 
-        $this->assertEquals($tokenList[1]->getTermText(),         'Слово');
-        $this->assertEquals($tokenList[1]->getStartOffset(),       7);
-        $this->assertEquals($tokenList[1]->getEndOffset(),         12);
-        $this->assertEquals($tokenList[1]->getPositionIncrement(), 1);
+        $this->assertEquals('Слово', $tokenList[1]->getTermText());
+        $this->assertEquals(7, $tokenList[1]->getStartOffset());
+        $this->assertEquals(12, $tokenList[1]->getEndOffset());
+        $this->assertEquals(1, $tokenList[1]->getPositionIncrement());
 
-        $this->assertEquals($tokenList[2]->getTermText(),         'ДругоеСлово');
-        $this->assertEquals($tokenList[2]->getStartOffset(),       14);
-        $this->assertEquals($tokenList[2]->getEndOffset(),         25);
-        $this->assertEquals($tokenList[2]->getPositionIncrement(), 1);
+        $this->assertEquals('ДругоеСлово', $tokenList[2]->getTermText());
+        $this->assertEquals(14, $tokenList[2]->getStartOffset());
+        $this->assertEquals(25, $tokenList[2]->getEndOffset());
+        $this->assertEquals(1, $tokenList[2]->getPositionIncrement());
     }
 
     public function testUtf8Num()
@@ -192,22 +194,22 @@ class AnalysisTest extends TestCase
         // UTF-8 text with a cyrillic symbols
         $tokenList = $analyzer->tokenize('Слово1 Слово2 ДругоеСлово', 'UTF-8');
 
-        $this->assertEquals(count($tokenList), 3);
+        $this->assertCount(3, $tokenList);
 
-        $this->assertEquals($tokenList[0]->getTermText(),         'Слово1');
-        $this->assertEquals($tokenList[0]->getStartOffset(),       0);
-        $this->assertEquals($tokenList[0]->getEndOffset(),         6);
-        $this->assertEquals($tokenList[0]->getPositionIncrement(), 1);
+        $this->assertEquals('Слово1', $tokenList[0]->getTermText());
+        $this->assertEquals(0, $tokenList[0]->getStartOffset());
+        $this->assertEquals(6, $tokenList[0]->getEndOffset());
+        $this->assertEquals(1, $tokenList[0]->getPositionIncrement());
 
-        $this->assertEquals($tokenList[1]->getTermText(),         'Слово2');
-        $this->assertEquals($tokenList[1]->getStartOffset(),       7);
-        $this->assertEquals($tokenList[1]->getEndOffset(),         13);
-        $this->assertEquals($tokenList[1]->getPositionIncrement(), 1);
+        $this->assertEquals('Слово2', $tokenList[1]->getTermText());
+        $this->assertEquals(7, $tokenList[1]->getStartOffset());
+        $this->assertEquals(13, $tokenList[1]->getEndOffset());
+        $this->assertEquals(1, $tokenList[1]->getPositionIncrement());
 
-        $this->assertEquals($tokenList[2]->getTermText(),         'ДругоеСлово');
-        $this->assertEquals($tokenList[2]->getStartOffset(),       14);
-        $this->assertEquals($tokenList[2]->getEndOffset(),         25);
-        $this->assertEquals($tokenList[2]->getPositionIncrement(), 1);
+        $this->assertEquals('ДругоеСлово', $tokenList[2]->getTermText());
+        $this->assertEquals(14, $tokenList[2]->getStartOffset());
+        $this->assertEquals(25, $tokenList[2]->getEndOffset());
+        $this->assertEquals(1, $tokenList[2]->getPositionIncrement());
     }
 
     public function testUtf8CaseInsensitive()
@@ -228,22 +230,22 @@ class AnalysisTest extends TestCase
         // UTF-8 text with a cyrillic symbols
         $tokenList = $analyzer->tokenize('Слово1 Слово2 ДругоеСлово', 'UTF-8');
 
-        $this->assertEquals(count($tokenList), 3);
+        $this->assertCount(3, $tokenList);
 
-        $this->assertEquals($tokenList[0]->getTermText(),         'слово');
-        $this->assertEquals($tokenList[0]->getStartOffset(),       0);
-        $this->assertEquals($tokenList[0]->getEndOffset(),         5);
-        $this->assertEquals($tokenList[0]->getPositionIncrement(), 1);
+        $this->assertEquals('слово', $tokenList[0]->getTermText());
+        $this->assertEquals(0, $tokenList[0]->getStartOffset());
+        $this->assertEquals(5, $tokenList[0]->getEndOffset());
+        $this->assertEquals(1, $tokenList[0]->getPositionIncrement());
 
-        $this->assertEquals($tokenList[1]->getTermText(),         'слово');
-        $this->assertEquals($tokenList[1]->getStartOffset(),       7);
-        $this->assertEquals($tokenList[1]->getEndOffset(),         12);
-        $this->assertEquals($tokenList[1]->getPositionIncrement(), 1);
+        $this->assertEquals('слово', $tokenList[1]->getTermText());
+        $this->assertEquals(7, $tokenList[1]->getStartOffset());
+        $this->assertEquals(12, $tokenList[1]->getEndOffset());
+        $this->assertEquals(1, $tokenList[1]->getPositionIncrement());
 
-        $this->assertEquals($tokenList[2]->getTermText(),         'другоеслово');
-        $this->assertEquals($tokenList[2]->getStartOffset(),       14);
-        $this->assertEquals($tokenList[2]->getEndOffset(),         25);
-        $this->assertEquals($tokenList[2]->getPositionIncrement(), 1);
+        $this->assertEquals('другоеслово', $tokenList[2]->getTermText());
+        $this->assertEquals(14, $tokenList[2]->getStartOffset());
+        $this->assertEquals(25, $tokenList[2]->getEndOffset());
+        $this->assertEquals(1, $tokenList[2]->getPositionIncrement());
     }
 
     public function testUtf8NumCaseInsensitive()
@@ -263,22 +265,22 @@ class AnalysisTest extends TestCase
         // UTF-8 text with a cyrillic symbols
         $tokenList = $analyzer->tokenize('Слово1 Слово2 ДругоеСлово', 'UTF-8');
 
-        $this->assertEquals(count($tokenList), 3);
+        $this->assertCount(3, $tokenList);
 
-        $this->assertEquals($tokenList[0]->getTermText(),         'слово1');
-        $this->assertEquals($tokenList[0]->getStartOffset(),       0);
-        $this->assertEquals($tokenList[0]->getEndOffset(),         6);
-        $this->assertEquals($tokenList[0]->getPositionIncrement(), 1);
+        $this->assertEquals('слово1', $tokenList[0]->getTermText());
+        $this->assertEquals(0, $tokenList[0]->getStartOffset());
+        $this->assertEquals(6, $tokenList[0]->getEndOffset());
+        $this->assertEquals(1, $tokenList[0]->getPositionIncrement());
 
-        $this->assertEquals($tokenList[1]->getTermText(),         'слово2');
-        $this->assertEquals($tokenList[1]->getStartOffset(),       7);
-        $this->assertEquals($tokenList[1]->getEndOffset(),         13);
-        $this->assertEquals($tokenList[1]->getPositionIncrement(), 1);
+        $this->assertEquals('слово2', $tokenList[1]->getTermText());
+        $this->assertEquals(7, $tokenList[1]->getStartOffset());
+        $this->assertEquals(13, $tokenList[1]->getEndOffset());
+        $this->assertEquals(1, $tokenList[1]->getPositionIncrement());
 
-        $this->assertEquals($tokenList[2]->getTermText(),         'другоеслово');
-        $this->assertEquals($tokenList[2]->getStartOffset(),       14);
-        $this->assertEquals($tokenList[2]->getEndOffset(),         25);
-        $this->assertEquals($tokenList[2]->getPositionIncrement(), 1);
+        $this->assertEquals('другоеслово', $tokenList[2]->getTermText());
+        $this->assertEquals(14, $tokenList[2]->getStartOffset());
+        $this->assertEquals(25, $tokenList[2]->getEndOffset());
+        $this->assertEquals(1, $tokenList[2]->getPositionIncrement());
     }
 
     public function testEncoding()
@@ -292,24 +294,27 @@ class AnalysisTest extends TestCase
         $analyzer = new Common\Utf8();
 
         // UTF-8 text with a cyrillic symbols
-        $tokenList = $analyzer->tokenize(iconv('UTF-8', 'Windows-1251', 'Слово1 Слово2 ДругоеСлово'), 'Windows-1251');
+        $tokenList = $analyzer->tokenize(
+            iconv('UTF-8', 'Windows-1251', 'Слово1 Слово2 ДругоеСлово'),
+            'Windows-1251'
+        );
 
-        $this->assertEquals(count($tokenList), 3);
+        $this->assertCount(3, $tokenList);
 
-        $this->assertEquals($tokenList[0]->getTermText(),         'Слово');
-        $this->assertEquals($tokenList[0]->getStartOffset(),       0);
-        $this->assertEquals($tokenList[0]->getEndOffset(),         5);
-        $this->assertEquals($tokenList[0]->getPositionIncrement(), 1);
+        $this->assertEquals('Слово', $tokenList[0]->getTermText());
+        $this->assertEquals(0, $tokenList[0]->getStartOffset());
+        $this->assertEquals(5, $tokenList[0]->getEndOffset());
+        $this->assertEquals(1, $tokenList[0]->getPositionIncrement());
 
-        $this->assertEquals($tokenList[1]->getTermText(),         'Слово');
-        $this->assertEquals($tokenList[1]->getStartOffset(),       7);
-        $this->assertEquals($tokenList[1]->getEndOffset(),         12);
-        $this->assertEquals($tokenList[1]->getPositionIncrement(), 1);
+        $this->assertEquals('Слово', $tokenList[1]->getTermText());
+        $this->assertEquals(7, $tokenList[1]->getStartOffset());
+        $this->assertEquals(12, $tokenList[1]->getEndOffset());
+        $this->assertEquals(1, $tokenList[1]->getPositionIncrement());
 
-        $this->assertEquals($tokenList[2]->getTermText(),         'ДругоеСлово');
-        $this->assertEquals($tokenList[2]->getStartOffset(),       14);
-        $this->assertEquals($tokenList[2]->getEndOffset(),         25);
-        $this->assertEquals($tokenList[2]->getPositionIncrement(), 1);
+        $this->assertEquals('ДругоеСлово', $tokenList[2]->getTermText());
+        $this->assertEquals(14, $tokenList[2]->getStartOffset());
+        $this->assertEquals(25, $tokenList[2]->getEndOffset());
+        $this->assertEquals(1, $tokenList[2]->getPositionIncrement());
     }
 
     public function testStopWords()
@@ -319,18 +324,18 @@ class AnalysisTest extends TestCase
         /** Zend_Search_Lucene_Analysis_TokenFilter_StopWords */
 
         $analyzer = new Text\CaseInsensitive();
-        $stopWordsFilter = new \ZendSearch\Lucene\Analysis\TokenFilter\StopWords(['word', 'and', 'or']);
+        $stopWordsFilter = new StopWords(['word', 'and', 'or']);
 
         $analyzer->addFilter($stopWordsFilter);
 
         $tokenList = $analyzer->tokenize('Word1 Word2 anotherWord');
 
-        $this->assertEquals(count($tokenList), 1);
+        $this->assertCount(1, $tokenList);
 
-        $this->assertEquals($tokenList[0]->getTermText(),         'anotherword');
-        $this->assertEquals($tokenList[0]->getStartOffset(),       12);
-        $this->assertEquals($tokenList[0]->getEndOffset(),         23);
-        $this->assertEquals($tokenList[0]->getPositionIncrement(), 1);
+        $this->assertEquals('anotherword', $tokenList[0]->getTermText());
+        $this->assertEquals(12, $tokenList[0]->getStartOffset());
+        $this->assertEquals(23, $tokenList[0]->getEndOffset());
+        $this->assertEquals(1, $tokenList[0]->getPositionIncrement());
     }
 
     public function testShortWords()
@@ -340,22 +345,22 @@ class AnalysisTest extends TestCase
         /** Zend_Search_Lucene_Analysis_TokenFilter_ShortWords */
 
         $analyzer = new Text\CaseInsensitive();
-        $stopWordsFilter = new \ZendSearch\Lucene\Analysis\TokenFilter\ShortWords(4 /* Minimal length */);
+        $stopWordsFilter = new ShortWords(4 /* Minimal length */);
 
         $analyzer->addFilter($stopWordsFilter);
 
         $tokenList = $analyzer->tokenize('Word1 and anotherWord');
 
-        $this->assertEquals(count($tokenList), 2);
+        $this->assertCount(2, $tokenList);
 
-        $this->assertEquals($tokenList[0]->getTermText(),         'word');
-        $this->assertEquals($tokenList[0]->getStartOffset(),       0);
-        $this->assertEquals($tokenList[0]->getEndOffset(),         4);
-        $this->assertEquals($tokenList[0]->getPositionIncrement(), 1);
+        $this->assertEquals('word', $tokenList[0]->getTermText());
+        $this->assertEquals(0, $tokenList[0]->getStartOffset());
+        $this->assertEquals(4, $tokenList[0]->getEndOffset());
+        $this->assertEquals(1, $tokenList[0]->getPositionIncrement());
 
-        $this->assertEquals($tokenList[1]->getTermText(),         'anotherword');
-        $this->assertEquals($tokenList[1]->getStartOffset(),       10);
-        $this->assertEquals($tokenList[1]->getEndOffset(),         21);
-        $this->assertEquals($tokenList[1]->getPositionIncrement(), 1);
+        $this->assertEquals('anotherword', $tokenList[1]->getTermText());
+        $this->assertEquals(10, $tokenList[1]->getStartOffset());
+        $this->assertEquals(21, $tokenList[1]->getEndOffset());
+        $this->assertEquals(1, $tokenList[1]->getPositionIncrement());
     }
 }

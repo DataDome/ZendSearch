@@ -12,6 +12,7 @@ namespace ZendSearch\Lucene\Analysis\Analyzer\Common;
 
 use ZendSearch\Lucene;
 use ZendSearch\Lucene\Analysis;
+use ZendSearch\Lucene\Analysis\Token;
 use ZendSearch\Lucene\Exception\RuntimeException;
 use Zend\Stdlib\ErrorHandler;
 
@@ -39,7 +40,7 @@ class Utf8 extends AbstractCommon
     /**
      * Object constructor
      *
-     * @throws \ZendSearch\Lucene\Exception\RuntimeException
+     * @throws RuntimeException
      */
     public function __construct()
     {
@@ -73,7 +74,7 @@ class Utf8 extends AbstractCommon
      * Get next token
      * Returns null at the end of stream
      *
-     * @return \ZendSearch\Lucene\Analysis\Token|null
+     * @return Token|null
      */
     public function nextToken()
     {
@@ -106,7 +107,7 @@ class Utf8 extends AbstractCommon
             $this->_bytePosition = $binStartPos + strlen($matchedWord);
             $this->_position     = $endPos;
 
-            $token = $this->normalize(new Analysis\Token($matchedWord, $startPos, $endPos));
+            $token = $this->normalize(new Token($matchedWord, $startPos, $endPos));
         } while ($token === null); // try again if token is skipped
 
         return $token;

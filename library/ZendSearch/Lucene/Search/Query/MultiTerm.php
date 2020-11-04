@@ -13,8 +13,10 @@ namespace ZendSearch\Lucene\Search\Query;
 use ZendSearch\Lucene;
 use ZendSearch\Lucene\Exception\InvalidArgumentException;
 use ZendSearch\Lucene\Index;
+use ZendSearch\Lucene\Index\DocsFilter;
 use ZendSearch\Lucene\Search\Highlighter\HighlighterInterface as Highlighter;
 use ZendSearch\Lucene\Search\Weight;
+use ZendSearch\Lucene\SearchIndexInterface;
 
 /**
  * @category   Zend
@@ -90,7 +92,8 @@ class MultiTerm extends AbstractQuery
      *
      * @param array $terms    Array of \ZendSearch\Lucene\Index\Term objects
      * @param array $signs    Array of signs.  Sign is boolean|null.
-     * @throws \ZendSearch\Lucene\Exception\InvalidArgumentException
+     *
+     * @throws InvalidArgumentException
      */
     public function __construct($terms = null, $signs = null)
     {
@@ -146,10 +149,11 @@ class MultiTerm extends AbstractQuery
     /**
      * Re-write query into primitive queries in the context of specified index
      *
-     * @param \ZendSearch\Lucene\SearchIndexInterface $index
-     * @return \ZendSearch\Lucene\Search\Query\AbstractQuery
+     * @param SearchIndexInterface $index
+     *
+     * @return AbstractQuery
      */
-    public function rewrite(Lucene\SearchIndexInterface $index)
+    public function rewrite(SearchIndexInterface $index)
     {
         if (count($this->_terms) == 0) {
             return new EmptyResult();
@@ -185,10 +189,11 @@ class MultiTerm extends AbstractQuery
     /**
      * Optimize query in the context of specified index
      *
-     * @param \ZendSearch\Lucene\SearchIndexInterface $index
-     * @return \ZendSearch\Lucene\Search\Query\AbstractQuery
+     * @param SearchIndexInterface $index
+     *
+     * @return AbstractQuery
      */
-    public function optimize(Lucene\SearchIndexInterface $index)
+    public function optimize(SearchIndexInterface $index)
     {
         $terms = $this->_terms;
         $signs = $this->_signs;
@@ -285,10 +290,11 @@ class MultiTerm extends AbstractQuery
     /**
      * Constructs an appropriate Weight implementation for this query.
      *
-     * @param \ZendSearch\Lucene\SearchIndexInterface $reader
-     * @return \ZendSearch\Lucene\Search\Weight\MultiTerm
+     * @param SearchIndexInterface $reader
+     *
+     * @return Weight\MultiTerm
      */
-    public function createWeight(Lucene\SearchIndexInterface $reader)
+    public function createWeight(SearchIndexInterface $reader)
     {
         $this->_weight = new Weight\MultiTerm($this, $reader);
         return $this->_weight;
@@ -299,9 +305,9 @@ class MultiTerm extends AbstractQuery
      * Calculate result vector for Conjunction query
      * (like '+something +another')
      *
-     * @param \ZendSearch\Lucene\SearchIndexInterface $reader
+     * @param SearchIndexInterface $reader
      */
-    private function _calculateConjunctionResult(Lucene\SearchIndexInterface $reader)
+    private function _calculateConjunctionResult(SearchIndexInterface $reader)
     {
         $this->_resVector = null;
 
@@ -320,7 +326,7 @@ class MultiTerm extends AbstractQuery
                         $ids,      SORT_ASC, SORT_NUMERIC,
                         $this->_terms);
 
-        $docsFilter = new Lucene\Index\DocsFilter();
+        $docsFilter = new DocsFilter();
         foreach ($this->_terms as $termId => $term) {
             $termDocs = $reader->termDocs($term, $docsFilter);
         }
@@ -341,9 +347,9 @@ class MultiTerm extends AbstractQuery
      * Calculate result vector for non Conjunction query
      * (like '+something -another')
      *
-     * @param \ZendSearch\Lucene\SearchIndexInterface $reader
+     * @param SearchIndexInterface $reader
      */
-    private function _calculateNonConjunctionResult(Lucene\SearchIndexInterface $reader)
+    private function _calculateNonConjunctionResult(SearchIndexInterface $reader)
     {
         $requiredVectors      = [];
         $requiredVectorsSizes = [];
@@ -440,10 +446,10 @@ class MultiTerm extends AbstractQuery
      * Score calculator for conjunction queries (all terms are required)
      *
      * @param integer $docId
-     * @param \ZendSearch\Lucene\SearchIndexInterface $reader
+     * @param SearchIndexInterface $reader
      * @return float
      */
-    public function _conjunctionScore($docId, Lucene\SearchIndexInterface $reader)
+    public function _conjunctionScore($docId, SearchIndexInterface $reader)
     {
         if ($this->_coord === null) {
             $this->_coord = $reader->getSimilarity()->coord(count($this->_terms),
@@ -470,7 +476,7 @@ class MultiTerm extends AbstractQuery
      * Score calculator for non conjunction queries (not all terms are required)
      *
      * @param integer $docId
-     * @param \ZendSearch\Lucene\SearchIndexInterface $reader
+     * @param SearchIndexInterface $reader
      * @return float
      */
     public function _nonConjunctionScore($docId, $reader)
@@ -517,10 +523,10 @@ class MultiTerm extends AbstractQuery
      * Execute query in context of index reader
      * It also initializes necessary internal structures
      *
-     * @param \ZendSearch\Lucene\SearchIndexInterface $reader
-     * @param \ZendSearch\Lucene\Index\DocsFilter|null $docsFilter
+     * @param SearchIndexInterface $reader
+     * @param DocsFilter|null $docsFilter
      */
-    public function execute(Lucene\SearchIndexInterface $reader, $docsFilter = null)
+    public function execute(SearchIndexInterface $reader, $docsFilter = null)
     {
         if ($this->_signs === null) {
             $this->_calculateConjunctionResult($reader);
@@ -548,10 +554,10 @@ class MultiTerm extends AbstractQuery
      * Score specified document
      *
      * @param integer $docId
-     * @param \ZendSearch\Lucene\SearchIndexInterface $reader
+     * @param SearchIndexInterface $reader
      * @return float
      */
-    public function score($docId, Lucene\SearchIndexInterface $reader)
+    public function score($docId, SearchIndexInterface $reader)
     {
         if (isset($this->_resVector[$docId])) {
             if ($this->_signs === null) {

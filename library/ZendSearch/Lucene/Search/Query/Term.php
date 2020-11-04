@@ -12,8 +12,10 @@ namespace ZendSearch\Lucene\Search\Query;
 
 use ZendSearch\Lucene;
 use ZendSearch\Lucene\Index;
+use ZendSearch\Lucene\Index\DocsFilter;
 use ZendSearch\Lucene\Search\Highlighter\HighlighterInterface as Highlighter;
 use ZendSearch\Lucene\Search\Weight;
+use ZendSearch\Lucene\SearchIndexInterface;
 
 /**
  * @category   Zend
@@ -25,7 +27,7 @@ class Term extends AbstractQuery
     /**
      * Term to find.
      *
-     * @var \ZendSearch\Lucene\Index\Term
+     * @var Index\Term
      */
     private $_term;
 
@@ -48,7 +50,7 @@ class Term extends AbstractQuery
     /**
      * Zend_Search_Lucene_Search_Query_Term constructor
      *
-     * @param \ZendSearch\Lucene\Index\Term $term
+     * @param Index\Term $term
      * @param boolean $sign
      */
     public function __construct(Index\Term $term)
@@ -59,10 +61,11 @@ class Term extends AbstractQuery
     /**
      * Re-write query into primitive queries in the context of specified index
      *
-     * @param \ZendSearch\Lucene\SearchIndexInterface $index
-     * @return \ZendSearch\Lucene\Search\Query\AbstractQuery
+     * @param SearchIndexInterface $index
+     *
+     * @return AbstractQuery
      */
-    public function rewrite(Lucene\SearchIndexInterface $index)
+    public function rewrite(SearchIndexInterface $index)
     {
         if ($this->_term->field != null) {
             return $this;
@@ -83,10 +86,11 @@ class Term extends AbstractQuery
     /**
      * Optimize query in the context of specified index
      *
-     * @param \ZendSearch\Lucene\SearchIndexInterface $index
-     * @return \ZendSearch\Lucene\Search\Query\AbstractQuery
+     * @param SearchIndexInterface $index
+     *
+     * @return AbstractQuery
      */
-    public function optimize(Lucene\SearchIndexInterface $index)
+    public function optimize(SearchIndexInterface $index)
     {
         // Check, that index contains specified term
         if (!$index->hasTerm($this->_term)) {
@@ -100,10 +104,11 @@ class Term extends AbstractQuery
     /**
      * Constructs an appropriate Weight implementation for this query.
      *
-     * @param \ZendSearch\Lucene\SearchIndexInterface $reader
-     * @return \ZendSearch\Lucene\Search\Weight\Term
+     * @param SearchIndexInterface $reader
+     *
+     * @return Weight\Term
      */
-    public function createWeight(Lucene\SearchIndexInterface $reader)
+    public function createWeight(SearchIndexInterface $reader)
     {
         $this->_weight = new Weight\Term($this->_term, $this, $reader);
         return $this->_weight;
@@ -113,10 +118,10 @@ class Term extends AbstractQuery
      * Execute query in context of index reader
      * It also initializes necessary internal structures
      *
-     * @param \ZendSearch\Lucene\SearchIndexInterface $reader
-     * @param \ZendSearch\Lucene\Index\DocsFilter|null $docsFilter
+     * @param SearchIndexInterface $reader
+     * @param DocsFilter|null $docsFilter
      */
-    public function execute(Lucene\SearchIndexInterface $reader, $docsFilter = null)
+    public function execute(SearchIndexInterface $reader, $docsFilter = null)
     {
         $this->_docVector = array_flip($reader->termDocs($this->_term, $docsFilter));
         $this->_termFreqs = $reader->termFreqs($this->_term, $docsFilter);
@@ -141,10 +146,10 @@ class Term extends AbstractQuery
      * Score specified document
      *
      * @param integer $docId
-     * @param \ZendSearch\Lucene\SearchIndexInterface $reader
+     * @param SearchIndexInterface $reader
      * @return float
      */
-    public function score($docId, Lucene\SearchIndexInterface $reader)
+    public function score($docId, SearchIndexInterface $reader)
     {
         if (isset($this->_docVector[$docId])) {
             return $reader->getSimilarity()->tf($this->_termFreqs[$docId]) *
@@ -169,7 +174,7 @@ class Term extends AbstractQuery
     /**
      * Return query term
      *
-     * @return \ZendSearch\Lucene\Index\Term
+     * @return Index\Term
      */
     public function getTerm()
     {

@@ -10,12 +10,16 @@
 
 namespace ZendSearch\Lucene\Index;
 
+use Exception;
 use ZendSearch\Lucene;
 use ZendSearch\Lucene\Document;
 use ZendSearch\Lucene\Exception\ExceptionInterface;
 use ZendSearch\Lucene\Exception\InvalidFileFormatException;
 use ZendSearch\Lucene\Exception\RuntimeException;
+use ZendSearch\Lucene\Index\SegmentWriter\DocumentWriter;
 use ZendSearch\Lucene\Storage\Directory;
+use ZendSearch\Lucene\Storage\Directory\DirectoryInterface;
+use ZendSearch\Lucene\Storage\File\FileInterface;
 
 /**
  * @category   Zend
@@ -76,7 +80,7 @@ class Writer
     /**
      * File system adapter.
      *
-     * @var \ZendSearch\Lucene\Storage\Directory\DirectoryInterface
+     * @var DirectoryInterface
      */
     private $_directory = null;
 
@@ -106,7 +110,7 @@ class Writer
     /**
      * Current segment to add documents
      *
-     * @var \ZendSearch\Lucene\Index\SegmentWriter\DocumentWriter
+     * @var DocumentWriter
      */
     private $_currentSegment = null;
 
@@ -115,7 +119,7 @@ class Writer
      *
      * It's a reference to the corresponding Zend_Search_Lucene::$_segmentInfos array
      *
-     * @var array|\ZendSearch\Lucene\Index\SegmentInfo
+     * @var array|SegmentInfo
      */
     private $_segmentInfos;
 
@@ -150,11 +154,11 @@ class Writer
     /**
      * Create empty index
      *
-     * @param \ZendSearch\Lucene\Storage\Directory\DirectoryInterface $directory
+     * @param DirectoryInterface $directory
      * @param integer $generation
      * @param integer $nameCount
      */
-    public static function createIndex(Directory\DirectoryInterface $directory, $generation, $nameCount)
+    public static function createIndex(DirectoryInterface $directory, $generation, $nameCount)
     {
         if ($generation == 0) {
             // Create index in pre-2.1 mode
@@ -205,12 +209,12 @@ class Writer
     /**
      * Open the index for writing
      *
-     * @param \ZendSearch\Lucene\Storage\Directory\DirectoryInterface $directory
+     * @param DirectoryInterface $directory
      * @param array $segmentInfos
      * @param integer $targetFormatVersion
-     * @param \ZendSearch\Lucene\Storage\File\FileInterface $cleanUpLock
+     * @param FileInterface $cleanUpLock
      */
-    public function __construct(Directory\DirectoryInterface $directory, &$segmentInfos, $targetFormatVersion)
+    public function __construct(DirectoryInterface $directory, &$segmentInfos, $targetFormatVersion)
     {
         $this->_directory           = $directory;
         $this->_segmentInfos        = &$segmentInfos;
@@ -220,7 +224,7 @@ class Writer
     /**
      * Adds a document to this index.
      *
-     * @param \ZendSearch\Lucene\Document $document
+     * @param Document $document
      */
     public function addDocument(Document $document)
     {
@@ -378,8 +382,8 @@ class Writer
     /**
      * Update segments file by adding current segment to a list
      *
-     * @throws \ZendSearch\Lucene\Exception\RuntimeException
-     * @throws \ZendSearch\Lucene\Exception\InvalidFileFormatException
+     * @throws RuntimeException
+     * @throws InvalidFileFormatException
      */
     private function _updateSegments()
     {
@@ -576,7 +580,7 @@ class Writer
             $newSegmentFile->seek($numOfSegmentsOffset);
             $newSegmentFile->writeInt($segmentsCount);  // Update segments count
             $newSegmentFile->close();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             /** Restore previous index generation */
             $generation--;
             $genFile->seek(4, SEEK_SET);

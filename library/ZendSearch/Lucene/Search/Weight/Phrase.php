@@ -12,6 +12,7 @@ namespace ZendSearch\Lucene\Search\Weight;
 
 use ZendSearch\Lucene;
 use ZendSearch\Lucene\Search\Query;
+use ZendSearch\Lucene\SearchIndexInterface;
 
 /**
  * @category   Zend
@@ -23,14 +24,14 @@ class Phrase extends AbstractWeight
     /**
      * IndexReader.
      *
-     * @var \ZendSearch\Lucene\SearchIndexInterface
+     * @var SearchIndexInterface
      */
     private $_reader;
 
     /**
      * The query that this concerns.
      *
-     * @var \ZendSearch\Lucene\Search\Query\Phrase
+     * @var Query\Phrase
      */
     private $_query;
 
@@ -44,10 +45,10 @@ class Phrase extends AbstractWeight
     /**
      * Zend_Search_Lucene_Search_Weight_Phrase constructor
      *
-     * @param \ZendSearch\Lucene\Search\Query\Phrase $query
-     * @param \ZendSearch\Lucene\SearchIndexInterface      $reader
+     * @param Query\Phrase $query
+     * @param SearchIndexInterface      $reader
      */
-    public function __construct(Query\Phrase $query, Lucene\SearchIndexInterface $reader)
+    public function __construct(Query\Phrase $query, SearchIndexInterface $reader)
     {
         $this->_query  = $query;
         $this->_reader = $reader;

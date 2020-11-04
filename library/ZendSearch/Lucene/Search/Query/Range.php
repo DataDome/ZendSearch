@@ -16,7 +16,9 @@ use ZendSearch\Lucene\Exception\OutOfBoundsException;
 use ZendSearch\Lucene\Exception\RuntimeException;
 use ZendSearch\Lucene\Exception\UnsupportedMethodCallException;
 use ZendSearch\Lucene\Index;
+use ZendSearch\Lucene\Index\DocsFilter;
 use ZendSearch\Lucene\Search\Highlighter\HighlighterInterface as Highlighter;
+use ZendSearch\Lucene\SearchIndexInterface;
 
 /**
  * @category   Zend
@@ -74,7 +76,8 @@ class Range extends AbstractQuery
      * @param \ZendSearch\Lucene\Index\Term|null $lowerTerm
      * @param \ZendSearch\Lucene\Index\Term|null $upperTerm
      * @param boolean $inclusive
-     * @throws \ZendSearch\Lucene\Exception\InvalidArgumentException
+     *
+     * @throws InvalidArgumentException
      */
     public function __construct($lowerTerm, $upperTerm, $inclusive)
     {
@@ -133,11 +136,12 @@ class Range extends AbstractQuery
     /**
      * Re-write query into primitive queries in the context of specified index
      *
-     * @param \ZendSearch\Lucene\SearchIndexInterface $index
-     * @throws \ZendSearch\Lucene\Exception\OutOfBoundsException
-     * @return \ZendSearch\Lucene\Search\Query\AbstractQuery
+     * @param SearchIndexInterface $index
+     *
+     * @return AbstractQuery
+     *@throws OutOfBoundsException
      */
-    public function rewrite(Lucene\SearchIndexInterface $index)
+    public function rewrite(SearchIndexInterface $index)
     {
         $this->_matches = [];
 
@@ -221,11 +225,12 @@ class Range extends AbstractQuery
     /**
      * Optimize query in the context of specified index
      *
-     * @param \ZendSearch\Lucene\SearchIndexInterface $index
-     * @throws \ZendSearch\Lucene\Exception\UnsupportedMethodCallException
-     * @return \ZendSearch\Lucene\Search\Query\AbstractQuery
+     * @param SearchIndexInterface $index
+     *
+     * @return AbstractQuery
+     *@throws UnsupportedMethodCallException
      */
-    public function optimize(Lucene\SearchIndexInterface $index)
+    public function optimize(SearchIndexInterface $index)
     {
         throw new UnsupportedMethodCallException(
             'Range query should not be directly used for search. Use $query->rewrite($index)'
@@ -236,7 +241,7 @@ class Range extends AbstractQuery
      * Return query terms
      *
      * @return array
-     * @throws \ZendSearch\Lucene\Exception\RuntimeException
+     * @throws RuntimeException
      */
     public function getQueryTerms()
     {
@@ -250,10 +255,11 @@ class Range extends AbstractQuery
     /**
      * Constructs an appropriate Weight implementation for this query.
      *
-     * @param \ZendSearch\Lucene\SearchIndexInterface $reader
-     * @throws \ZendSearch\Lucene\Exception\UnsupportedMethodCallException
+     * @param SearchIndexInterface $reader
+     *
+     * @throws UnsupportedMethodCallException
      */
-    public function createWeight(Lucene\SearchIndexInterface $reader)
+    public function createWeight(SearchIndexInterface $reader)
     {
         throw new UnsupportedMethodCallException(
             'Range query should not be directly used for search. Use $query->rewrite($index)'
@@ -265,11 +271,12 @@ class Range extends AbstractQuery
      * Execute query in context of index reader
      * It also initializes necessary internal structures
      *
-     * @param \ZendSearch\Lucene\SearchIndexInterface $reader
-     * @param \ZendSearch\Lucene\Index\DocsFilter|null $docsFilter
-     * @throws \ZendSearch\Lucene\Exception\UnsupportedMethodCallException
+     * @param SearchIndexInterface $reader
+     * @param DocsFilter|null $docsFilter
+     *
+     * @throws UnsupportedMethodCallException
      */
-    public function execute(Lucene\SearchIndexInterface $reader, $docsFilter = null)
+    public function execute(SearchIndexInterface $reader, $docsFilter = null)
     {
         throw new UnsupportedMethodCallException(
             'Range query should not be directly used for search. Use $query->rewrite($index)'
@@ -281,8 +288,8 @@ class Range extends AbstractQuery
      *
      * It's an array with document ids as keys (performance considerations)
      *
-     * @throws \ZendSearch\Lucene\Exception\UnsupportedMethodCallException
      * @return array
+     *@throws UnsupportedMethodCallException
      */
     public function matchedDocs()
     {
@@ -295,11 +302,12 @@ class Range extends AbstractQuery
      * Score specified document
      *
      * @param integer $docId
-     * @param \ZendSearch\Lucene\SearchIndexInterface $reader
-     * @throws \ZendSearch\Lucene\Exception\UnsupportedMethodCallException
+     * @param SearchIndexInterface $reader
+     *
      * @return float
+     *@throws UnsupportedMethodCallException
      */
-    public function score($docId, Lucene\SearchIndexInterface $reader)
+    public function score($docId, SearchIndexInterface $reader)
     {
         throw new UnsupportedMethodCallException(
             'Range query should not be directly used for search. Use $query->rewrite($index)'

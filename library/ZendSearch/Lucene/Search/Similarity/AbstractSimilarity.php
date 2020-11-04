@@ -10,6 +10,8 @@
 
 namespace ZendSearch\Lucene\Search\Similarity;
 
+use ZendSearch\Lucene\SearchIndexInterface;
+
 /**
  * @todo !!!!!!! This class is actually used as singleton. It has to be redesigned.
  */
@@ -483,10 +485,10 @@ abstract class AbstractSimilarity
      * Returns a score factor for the term
      *
      * @param mixed $input
-     * @param \ZendSearch\Lucene\SearchIndexInterface $reader
+     * @param SearchIndexInterface $reader
      * @return float a score factor for the term
      */
-    public function idf($input, \ZendSearch\Lucene\SearchIndexInterface $reader)
+    public function idf($input, SearchIndexInterface $reader)
     {
         if (!is_array($input)) {
             return $this->idfFreq($reader->docFreq($input), $reader->count());

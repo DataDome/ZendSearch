@@ -17,7 +17,9 @@ use ZendSearch\Lucene\Search\Exception\QueryParserException;
 use ZendSearch\Lucene\Search\Highlighter\HighlighterInterface as Highlighter;
 use ZendSearch\Lucene\Search\Query;
 use Zend\Stdlib\ErrorHandler;
+use ZendSearch\Lucene\Search\Query\AbstractQuery;
 use ZendSearch\Lucene\Search\QueryLexer;
+use ZendSearch\Lucene\SearchIndexInterface;
 
 /**
  * It's an internal abstract class intended to finalize ase a query processing after query parsing.
@@ -69,11 +71,11 @@ class Term extends AbstractPreprocessing
     /**
      * Re-write query into primitive queries in the context of specified index
      *
-     * @param \ZendSearch\Lucene\SearchIndexInterface $index
-     * @throws \ZendSearch\Lucene\Search\Exception\QueryParserException
-     * @return \ZendSearch\Lucene\Search\Query\AbstractQuery
+     * @param SearchIndexInterface $index
+     * @throws QueryParserException
+     * @return AbstractQuery
      */
-    public function rewrite(Lucene\SearchIndexInterface $index)
+    public function rewrite(SearchIndexInterface $index)
     {
         if ($this->_field === null) {
             $query = new Query\MultiTerm();

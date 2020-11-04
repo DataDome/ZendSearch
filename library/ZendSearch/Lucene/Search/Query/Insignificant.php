@@ -11,8 +11,11 @@
 namespace ZendSearch\Lucene\Search\Query;
 
 use ZendSearch\Lucene;
+use ZendSearch\Lucene\Index\DocsFilter;
 use ZendSearch\Lucene\Search\Highlighter\HighlighterInterface as Highlighter;
 use ZendSearch\Lucene\Search\Weight;
+use ZendSearch\Lucene\Search\Weight\EmptyResultWeight;
+use ZendSearch\Lucene\SearchIndexInterface;
 
 /**
  * The insignificant query returns empty result, but doesn't limit result set as a part of other queries
@@ -26,10 +29,11 @@ class Insignificant extends AbstractQuery
     /**
      * Re-write query into primitive queries in the context of specified index
      *
-     * @param \ZendSearch\Lucene\SearchIndexInterface $index
-     * @return \ZendSearch\Lucene\Search\Query\AbstractQuery
+     * @param SearchIndexInterface $index
+     *
+     * @return AbstractQuery
      */
-    public function rewrite(Lucene\SearchIndexInterface $index)
+    public function rewrite(SearchIndexInterface $index)
     {
         return $this;
     }
@@ -37,10 +41,11 @@ class Insignificant extends AbstractQuery
     /**
      * Optimize query in the context of specified index
      *
-     * @param \ZendSearch\Lucene\SearchIndexInterface $index
-     * @return \ZendSearch\Lucene\Search\Query\AbstractQuery
+     * @param SearchIndexInterface $index
+     *
+     * @return AbstractQuery
      */
-    public function optimize(Lucene\SearchIndexInterface $index)
+    public function optimize(SearchIndexInterface $index)
     {
         return $this;
     }
@@ -48,22 +53,22 @@ class Insignificant extends AbstractQuery
     /**
      * Constructs an appropriate Weight implementation for this query.
      *
-     * @param \ZendSearch\Lucene\SearchIndexInterface $reader
-     * @return \ZendSearch\Lucene\Search\Weight\EmptyResultWeight
+     * @param SearchIndexInterface $reader
+     * @return EmptyResultWeight
      */
-    public function createWeight(Lucene\SearchIndexInterface $reader)
+    public function createWeight(SearchIndexInterface $reader)
     {
-        return new Weight\EmptyResultWeight();
+        return new EmptyResultWeight();
     }
 
     /**
      * Execute query in context of index reader
      * It also initializes necessary internal structures
      *
-     * @param \ZendSearch\Lucene\SearchIndexInterface $reader
-     * @param \ZendSearch\Lucene\Index\DocsFilter|null $docsFilter
+     * @param SearchIndexInterface $reader
+     * @param DocsFilter|null $docsFilter
      */
-    public function execute(Lucene\SearchIndexInterface $reader, $docsFilter = null)
+    public function execute(SearchIndexInterface $reader, $docsFilter = null)
     {
         // Do nothing
     }
@@ -84,10 +89,10 @@ class Insignificant extends AbstractQuery
      * Score specified document
      *
      * @param integer $docId
-     * @param \ZendSearch\Lucene\SearchIndexInterface $reader
+     * @param SearchIndexInterface $reader
      * @return float
      */
-    public function score($docId, Lucene\SearchIndexInterface $reader)
+    public function score($docId, SearchIndexInterface $reader)
     {
         return 0;
     }

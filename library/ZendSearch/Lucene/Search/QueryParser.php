@@ -10,11 +10,13 @@
 
 namespace ZendSearch\Lucene\Search;
 
+use Exception;
 use ZendSearch\Lucene;
 use ZendSearch\Lucene\Analysis\Analyzer;
 use ZendSearch\Lucene\Exception\RuntimeException;
 use ZendSearch\Lucene\Index;
 use ZendSearch\Lucene\Search\Exception\QueryParserException;
+use ZendSearch\Lucene\Search\Query\AbstractQuery;
 
 /**
  * @category   Zend
@@ -26,7 +28,7 @@ class QueryParser extends Lucene\AbstractFSM
     /**
      * Parser instance
      *
-     * @var \ZendSearch\Lucene\Search\QueryParser
+     * @var QueryParser
      */
     private static $_instance = null;
 
@@ -34,7 +36,7 @@ class QueryParser extends Lucene\AbstractFSM
     /**
      * Query lexer
      *
-     * @var \ZendSearch\Lucene\Search\QueryLexer
+     * @var QueryLexer
      */
     private $_lexer;
 
@@ -58,7 +60,7 @@ class QueryParser extends Lucene\AbstractFSM
      *
      * It can be processed within FSM states, but this addirional state simplifies FSM
      *
-     * @var \ZendSearch\Lucene\Search\QueryToken
+     * @var QueryToken
      */
     private $_lastToken = null;
 
@@ -72,7 +74,7 @@ class QueryParser extends Lucene\AbstractFSM
     /**
      * Current query parser context
      *
-     * @var \ZendSearch\Lucene\Search\QueryParserContext
+     * @var QueryParserContext
      */
     private $_context;
 
@@ -243,7 +245,7 @@ class QueryParser extends Lucene\AbstractFSM
     /**
      * Get query parser instance
      *
-     * @return \ZendSearch\Lucene\Search\QueryParser
+     * @return QueryParser
      */
     private static function _getInstance()
     {
@@ -334,9 +336,9 @@ class QueryParser extends Lucene\AbstractFSM
      * @param string $strQuery
      * @param string $encoding
      *
-     * @return \ZendSearch\Lucene\Search\Query\AbstractQuery
-     * @throws \ZendSearch\Lucene\Exception\RuntimeException*@throws \Exception
-     * @throws \ZendSearch\Lucene\Search\Exception\QueryParserException
+     * @return AbstractQuery
+     * @throws RuntimeException*@throws \Exception
+     * @throws QueryParserException
      */
     public static function parse($strQuery, $encoding = null)
     {
@@ -364,7 +366,7 @@ class QueryParser extends Lucene\AbstractFSM
                     self::$_instance->process($token->type);
 
                     self::$_instance->_lastToken = $token;
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     if (strpos($e->getMessage(), 'There is no any rule for') !== false) {
                         throw new QueryParserException( 'Syntax error at char position ' . $token->position . '.', 0, $e);
                     }
@@ -407,7 +409,7 @@ class QueryParser extends Lucene\AbstractFSM
 
     /**
      * Add term to a query
-     * @throws \Exception
+     * @throws Exception
      */
     public function addTermEntry()
     {
@@ -424,7 +426,7 @@ class QueryParser extends Lucene\AbstractFSM
 
     /**
      * Add phrase to a query
-     * @throws \Exception
+     * @throws Exception
      */
     public function addPhraseEntry()
     {
@@ -468,8 +470,8 @@ class QueryParser extends Lucene\AbstractFSM
     /**
      * Process modifier parameter
      *
-     * @throws \ZendSearch\Lucene\Search\Exception\QueryParserException
-     * @throws \ZendSearch\Lucene\Exception\RuntimeException
+     * @throws QueryParserException
+     * @throws RuntimeException
      */
     public function processModifierParameter()
     {
@@ -536,7 +538,7 @@ class QueryParser extends Lucene\AbstractFSM
     /**
      * Process last range query term (opened interval)
      *
-     * @throws \ZendSearch\Lucene\Search\Exception\QueryParserException
+     * @throws QueryParserException
      */
     public function openedRQLastTerm()
     {
@@ -608,7 +610,7 @@ class QueryParser extends Lucene\AbstractFSM
     /**
      * Process last range query term (closed interval)
      *
-     * @throws \ZendSearch\Lucene\Search\Exception\QueryParserException
+     * @throws QueryParserException
      */
     public function closedRQLastTerm()
     {

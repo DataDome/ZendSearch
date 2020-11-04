@@ -11,6 +11,7 @@
 namespace ZendSearch\Lucene\Search;
 
 use ZendSearch\Lucene;
+use ZendSearch\Lucene\Exception\UnexpectedValueException;
 
 /**
  * @category   Zend
@@ -174,13 +175,13 @@ class BooleanExpressionRecognizer extends Lucene\AbstractFSM
      *        ...
      *      ) // end of structure
      *
-     * @throws \ZendSearch\Lucene\Exception\UnexpectedValueException
+     * @throws UnexpectedValueException
      * @return array
      */
     public function finishExpression()
     {
         if ($this->getState() != self::ST_LITERAL) {
-            throw new Lucene\Exception\UnexpectedValueException('Literal expected.');
+            throw new UnexpectedValueException('Literal expected.');
         }
 
         $this->_conjunctions[] = $this->_currentConjunction;

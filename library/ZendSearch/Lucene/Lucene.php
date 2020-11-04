@@ -49,7 +49,8 @@ class Lucene
      * Create index
      *
      * @param mixed $directory
-     * @return \ZendSearch\Lucene\SearchIndexInterface
+     *
+     * @return SearchIndexInterface
      */
     public static function create($directory)
     {
@@ -60,7 +61,8 @@ class Lucene
      * Open index
      *
      * @param mixed $directory
-     * @return \ZendSearch\Lucene\SearchIndexInterface
+     *
+     * @return SearchIndexInterface
      */
     public static function open($directory)
     {
@@ -68,7 +70,7 @@ class Lucene
     }
 
     /**
-     * @throws \ZendSearch\Lucene\Exception\UnsupportedMethodCallException
+     * @throws UnsupportedMethodCallException
      */
     public function __construct()
     {

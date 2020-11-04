@@ -12,6 +12,8 @@ namespace ZendSearch\Lucene\Search\Weight;
 
 use ZendSearch\Lucene;
 use ZendSearch\Lucene\Search\Query;
+use ZendSearch\Lucene\Search\Query\AbstractQuery;
+use ZendSearch\Lucene\SearchIndexInterface;
 
 /**
  * @category   Zend
@@ -23,14 +25,14 @@ class Boolean extends AbstractWeight
     /**
      * IndexReader.
      *
-     * @var \ZendSearch\Lucene\SearchIndexInterface
+     * @var SearchIndexInterface
      */
     private $_reader;
 
     /**
      * The query that this concerns.
      *
-     * @var \ZendSearch\Lucene\Search\Query\AbstractQuery
+     * @var AbstractQuery
      */
     private $_query;
 
@@ -48,10 +50,10 @@ class Boolean extends AbstractWeight
      * query - the query that this concerns.
      * reader - index reader
      *
-     * @param \ZendSearch\Lucene\Search\Query\AbstractQuery $query
-     * @param \ZendSearch\Lucene\SearchIndexInterface    $reader
+     * @param AbstractQuery $query
+     * @param SearchIndexInterface    $reader
      */
-    public function __construct(Query\AbstractQuery $query, Lucene\SearchIndexInterface    $reader)
+    public function __construct(AbstractQuery $query, SearchIndexInterface    $reader)
     {
         $this->_query   = $query;
         $this->_reader  = $reader;

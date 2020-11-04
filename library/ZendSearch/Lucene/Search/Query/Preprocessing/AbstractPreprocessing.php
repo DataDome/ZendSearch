@@ -12,7 +12,10 @@ namespace ZendSearch\Lucene\Search\Query\Preprocessing;
 
 use ZendSearch\Lucene;
 use ZendSearch\Lucene\Exception\UnsupportedMethodCallException;
+use ZendSearch\Lucene\Index\DocsFilter;
 use ZendSearch\Lucene\Search\Query;
+use ZendSearch\Lucene\Search\Query\AbstractQuery;
+use ZendSearch\Lucene\SearchIndexInterface;
 
 /**
  * It's an internal abstract class intended to finalize ase a query processing after query parsing.
@@ -23,7 +26,7 @@ use ZendSearch\Lucene\Search\Query;
  * @subpackage Search
  * @internal
  */
-abstract class AbstractPreprocessing extends Query\AbstractQuery
+abstract class AbstractPreprocessing extends AbstractQuery
 {
     /**
      * Matched terms.
@@ -40,11 +43,12 @@ abstract class AbstractPreprocessing extends Query\AbstractQuery
     /**
      * Optimize query in the context of specified index
      *
-     * @param \ZendSearch\Lucene\SearchIndexInterface $index
-     * @throws \ZendSearch\Lucene\Exception\UnsupportedMethodCallException
-     * @return \ZendSearch\Lucene\Search\Query\AbstractQuery
+     * @param SearchIndexInterface $index
+     *
+     * @return AbstractQuery
+     *@throws UnsupportedMethodCallException
      */
-    public function optimize(Lucene\SearchIndexInterface $index)
+    public function optimize(SearchIndexInterface $index)
     {
         throw new UnsupportedMethodCallException('This query is not intended to be executed.');
     }
@@ -52,10 +56,11 @@ abstract class AbstractPreprocessing extends Query\AbstractQuery
     /**
      * Constructs an appropriate Weight implementation for this query.
      *
-     * @param \ZendSearch\Lucene\SearchIndexInterface $reader
-     * @throws \ZendSearch\Lucene\Exception\UnsupportedMethodCallException
+     * @param SearchIndexInterface $reader
+     *
+     * @throws UnsupportedMethodCallException
      */
-    public function createWeight(Lucene\SearchIndexInterface $reader)
+    public function createWeight(SearchIndexInterface $reader)
     {
         throw new UnsupportedMethodCallException('This query is not intended to be executed.');
     }
@@ -64,11 +69,12 @@ abstract class AbstractPreprocessing extends Query\AbstractQuery
      * Execute query in context of index reader
      * It also initializes necessary internal structures
      *
-     * @param \ZendSearch\Lucene\SearchIndexInterface $reader
-     * @param \ZendSearch\Lucene\Index\DocsFilter|null $docsFilter
-     * @throws \ZendSearch\Lucene\Exception\UnsupportedMethodCallException
+     * @param SearchIndexInterface $reader
+     * @param DocsFilter|null $docsFilter
+     *
+     * @throws UnsupportedMethodCallException
      */
-    public function execute(Lucene\SearchIndexInterface $reader, $docsFilter = null)
+    public function execute(SearchIndexInterface $reader, $docsFilter = null)
     {
         throw new UnsupportedMethodCallException('This query is not intended to be executed.');
     }
@@ -78,8 +84,8 @@ abstract class AbstractPreprocessing extends Query\AbstractQuery
      *
      * It's an array with document ids as keys (performance considerations)
      *
-     * @throws \ZendSearch\Lucene\Exception\UnsupportedMethodCallException
      * @return array
+     *@throws UnsupportedMethodCallException
      */
     public function matchedDocs()
     {
@@ -90,11 +96,12 @@ abstract class AbstractPreprocessing extends Query\AbstractQuery
      * Score specified document
      *
      * @param integer $docId
-     * @param \ZendSearch\Lucene\SearchIndexInterface $reader
-     * @throws \ZendSearch\Lucene\Exception\UnsupportedMethodCallException
+     * @param SearchIndexInterface $reader
+     *
      * @return float
+     *@throws UnsupportedMethodCallException
      */
-    public function score($docId, Lucene\SearchIndexInterface $reader)
+    public function score($docId, SearchIndexInterface $reader)
     {
         throw new UnsupportedMethodCallException('This query is not intended to be executed.');
     }
@@ -102,8 +109,8 @@ abstract class AbstractPreprocessing extends Query\AbstractQuery
     /**
      * Return query terms
      *
-     * @throws \ZendSearch\Lucene\Exception\UnsupportedMethodCallException
      * @return array
+     *@throws UnsupportedMethodCallException
      */
     public function getQueryTerms()
     {

@@ -13,6 +13,8 @@ namespace ZendSearch\Lucene\Search\Weight;
 use ZendSearch\Lucene;
 use ZendSearch\Lucene\Index;
 use ZendSearch\Lucene\Search\Query;
+use ZendSearch\Lucene\Search\Query\AbstractQuery;
+use ZendSearch\Lucene\SearchIndexInterface;
 
 /**
  * @category   Zend
@@ -24,21 +26,21 @@ class Term extends AbstractWeight
     /**
      * IndexReader.
      *
-     * @var \ZendSearch\Lucene\SearchIndexInterface
+     * @var SearchIndexInterface
      */
     private $_reader;
 
     /**
      * Term
      *
-     * @var \ZendSearch\Lucene\Index\Term
+     * @var Index\Term
      */
     private $_term;
 
     /**
      * The query that this concerns.
      *
-     * @var \ZendSearch\Lucene\Search\Query\AbstractQuery
+     * @var AbstractQuery
      */
     private $_query;
 
@@ -61,13 +63,14 @@ class Term extends AbstractWeight
      * Zend_Search_Lucene_Search_Weight_Term constructor
      * reader - index reader
      *
-     * @param \ZendSearch\Lucene\Index\Term                 $term
-     * @param \ZendSearch\Lucene\Search\Query\AbstractQuery $query
-     * @param \ZendSearch\Lucene\SearchIndexInterface             $reader
+     * @param Index\Term $term
+     * @param AbstractQuery $query
+     * @param SearchIndexInterface             $reader
      */
-    public function __construct(Index\Term            $term,
-                                Query\AbstractQuery   $query,
-                                Lucene\SearchIndexInterface $reader)
+    public function __construct(
+        Index\Term $term,
+                                AbstractQuery   $query,
+                                SearchIndexInterface $reader)
     {
         $this->_term   = $term;
         $this->_query  = $query;

@@ -12,6 +12,7 @@ namespace ZendSearch\Lucene\Analysis\Analyzer\Common;
 
 use ZendSearch\Lucene\Analysis;
 use ZendSearch\Lucene\Analysis\Analyzer\AnalyzerInterface;
+use ZendSearch\Lucene\Analysis\Token;
 use ZendSearch\Lucene\Analysis\TokenFilter\TokenFilterInterface;
 
 /**
@@ -37,7 +38,7 @@ abstract class AbstractCommon extends Analysis\Analyzer\AbstractAnalyzer
     /**
      * Add Token filter to the AnalyzerInterface
      *
-     * @param \ZendSearch\Lucene\Analysis\TokenFilter\TokenFilterInterface $filter
+     * @param TokenFilterInterface $filter
      */
     public function addFilter(TokenFilterInterface $filter)
     {
@@ -47,10 +48,10 @@ abstract class AbstractCommon extends Analysis\Analyzer\AbstractAnalyzer
     /**
      * Apply filters to the token. Can return null when the token was removed.
      *
-     * @param \ZendSearch\Lucene\Analysis\Token $token
-     * @return \ZendSearch\Lucene\Analysis\Token
+     * @param Token $token
+     * @return Token
      */
-    public function normalize(Analysis\Token $token)
+    public function normalize(Token $token)
     {
         foreach ($this->_filters as $filter) {
             $token = $filter->normalize($token);

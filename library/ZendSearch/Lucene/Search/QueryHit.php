@@ -12,6 +12,7 @@ namespace ZendSearch\Lucene\Search;
 
 use ZendSearch\Lucene;
 use ZendSearch\Lucene\Document;
+use ZendSearch\Lucene\SearchIndexInterface;
 
 /**
  * @category   Zend
@@ -22,13 +23,14 @@ class QueryHit
 {
     /**
      * Object handle of the index
-     * @var \ZendSearch\Lucene\SearchIndexInterface
+     * @var SearchIndexInterface
      */
     protected $_index = null;
 
     /**
      * Object handle of the document associated with this hit
-     * @var \ZendSearch\Lucene\Document
+     *
+     * @var Document
      */
     protected $_document = null;
 
@@ -55,10 +57,10 @@ class QueryHit
      * Constructor - pass object handle of Zend_Search_Lucene_Interface index that produced
      * the hit so the document can be retrieved easily from the hit.
      *
-     * @param \ZendSearch\Lucene\SearchIndexInterface $index
+     * @param SearchIndexInterface $index
      */
 
-    public function __construct(Lucene\SearchIndexInterface $index)
+    public function __construct(SearchIndexInterface $index)
     {
         $this->_index = $index;
     }
@@ -91,7 +93,7 @@ class QueryHit
     /**
      * Return the document object for this hit
      *
-     * @return \ZendSearch\Lucene\Document
+     * @return Document
      */
     public function getDocument()
     {
@@ -106,7 +108,7 @@ class QueryHit
     /**
      * Return the index object for this hit
      *
-     * @return \ZendSearch\Lucene\SearchIndexInterface
+     * @return SearchIndexInterface
      */
     public function getIndex()
     {

@@ -42,6 +42,8 @@ abstract class AbstractAnalyzer implements LuceneAnalyzer
      * Tokens are returned in UTF-8 (internal Zend_Search_Lucene encoding)
      *
      * @param string $data
+     * @param string $encoding
+     *
      * @return array
      */
     public function tokenize($data, $encoding = '')
@@ -61,6 +63,7 @@ abstract class AbstractAnalyzer implements LuceneAnalyzer
      * Set input
      *
      * @param string $data
+     * @param string $encoding
      */
     public function setInput($data, $encoding = '')
     {

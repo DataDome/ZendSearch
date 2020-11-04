@@ -24,14 +24,14 @@ class Analyzer
     /**
      * The AnalyzerInterface implementation used by default.
      *
-     * @var \ZendSearch\Lucene\Analysis\Analyzer\AnalyzerInterface
+     * @var AnalyzerInterface
      */
     private static $_defaultImpl = null;
 
     /**
      * Set the default AnalyzerInterface implementation used by indexing code.
      *
-     * @param \ZendSearch\Lucene\Analysis\Analyzer\AnalyzerInterface $analyzer
+     * @param AnalyzerInterface $analyzer
      */
     public static function setDefault(LuceneAnalyzer $analyzer)
     {
@@ -41,7 +41,7 @@ class Analyzer
     /**
      * Return the default AnalyzerInterface implementation used by indexing code.
      *
-     * @return \ZendSearch\Lucene\Analysis\Analyzer\AnalyzerInterface
+     * @return AnalyzerInterface
      */
     public static function getDefault()
     {

@@ -25,7 +25,8 @@ class LowerCaseUtf8 implements TokenFilterInterface
 {
     /**
      * Object constructor
-     * @throws \ZendSearch\Lucene\Exception\ExtensionNotLoadedException
+     *
+     * @throws ExtensionNotLoadedException
      */
     public function __construct()
     {
@@ -38,8 +39,9 @@ class LowerCaseUtf8 implements TokenFilterInterface
     /**
      * Normalize Token or remove it (if null is returned)
      *
-     * @param \ZendSearch\Lucene\Analysis\Token $srcToken
-     * @return \ZendSearch\Lucene\Analysis\Token
+     * @param Token $srcToken
+     *
+     * @return Token
      */
     public function normalize(Token $srcToken)
     {

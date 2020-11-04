@@ -11,6 +11,7 @@
 namespace ZendSearch\Lucene\Search\Highlighter;
 
 use ZendSearch\Lucene\Document;
+use ZendSearch\Lucene\Document\HTML;
 
 /**
  * @category   Zend
@@ -22,14 +23,14 @@ interface HighlighterInterface
     /**
      * Set document for highlighting.
      *
-     * @param \ZendSearch\Lucene\Document\HTML $document
+     * @param HTML $document
      */
-    public function setDocument(Document\HTML $document);
+    public function setDocument(HTML $document);
 
     /**
      * Get document for highlighting.
      *
-     * @return \ZendSearch\Lucene\Document\HTML $document
+     * @return HTML $document
      */
     public function getDocument();
 

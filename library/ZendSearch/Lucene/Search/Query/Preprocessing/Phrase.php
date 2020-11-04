@@ -16,6 +16,8 @@ use ZendSearch\Lucene\Analysis\Analyzer\AnalyzerInterface;
 use ZendSearch\Lucene\Index;
 use ZendSearch\Lucene\Search\Highlighter\HighlighterInterface as Highlighter;
 use ZendSearch\Lucene\Search\Query;
+use ZendSearch\Lucene\Search\Query\AbstractQuery;
+use ZendSearch\Lucene\SearchIndexInterface;
 
 /**
  * It's an internal abstract class intended to finalize ase a query processing after query parsing.
@@ -107,10 +109,10 @@ class Phrase extends AbstractPreprocessing
     /**
      * Re-write query into primitive queries in the context of specified index
      *
-     * @param \ZendSearch\Lucene\SearchIndexInterface $index
-     * @return \ZendSearch\Lucene\Search\Query\AbstractQuery
+     * @param SearchIndexInterface $index
+     * @return AbstractQuery
      */
-    public function rewrite(Lucene\SearchIndexInterface $index)
+    public function rewrite(SearchIndexInterface $index)
     {
 // Allow to use wildcards within phrases
 // They are either removed by text analyzer or used as a part of keyword for keyword fields

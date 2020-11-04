@@ -10,6 +10,9 @@
 
 namespace ZendSearch\Lucene\Search\QueryEntry;
 
+use ZendSearch\Lucene\Search\Exception\QueryParserException;
+use ZendSearch\Lucene\Search\Query\AbstractQuery;
+
 /**
  * @category   Zend
  * @package    Zend_Search_Lucene
@@ -77,8 +80,8 @@ class Phrase extends AbstractQueryEntry
      * Transform entry to a subquery
      *
      * @param string $encoding
-     * @throws \ZendSearch\Lucene\Search\Exception\QueryParserException
-     * @return \ZendSearch\Lucene\Search\Query\AbstractQuery
+     * @throws QueryParserException
+     * @return AbstractQuery
      */
     public function getQuery($encoding)
     {
