@@ -380,7 +380,7 @@ class QueryParser extends Lucene\AbstractFSM
             return self::$_instance->_context->getQuery();
         } catch (QueryParserException $e) {
 
-            var_dump($e->getMessage().PHP_EOL.$e->getTraceAsString());die;
+//            var_dump($e->getMessage().PHP_EOL.$e->getTraceAsString());die;
             if (self::$_instance->_suppressQueryParsingExceptions) {
                 $queryTokens = Analyzer\Analyzer::getDefault()->tokenize($strQuery, self::$_instance->_encoding);
 

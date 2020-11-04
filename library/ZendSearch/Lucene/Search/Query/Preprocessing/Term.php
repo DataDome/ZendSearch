@@ -130,8 +130,8 @@ class Term extends AbstractPreprocessing
         // -------------------------------------
         // Recognize wildcard queries
 
-        /** 
-         * @todo check for PCRE unicode support may be performed through Zend_Environment in some future 
+        /**
+         * @todo check for PCRE unicode support may be performed through Zend_Environment in some future
          */
         ErrorHandler::start(E_WARNING);
         $result = preg_match('/\pL/u', 'a');
@@ -215,87 +215,6 @@ class Term extends AbstractPreprocessing
 
         $this->_matches = $query->getQueryTerms();
         return $query;
-    }
-
-    /**
-     * Query specific matches highlighting
-     *
-     * @param Highlighter $highlighter  Highlighter object (also contains doc for highlighting)
-     */
-    protected function _highlightMatches(Highlighter $highlighter)
-    {
-        /** Skip fields detection. We don't need it, since we expect all fields presented in the HTML body and don't differentiate them */
-
-        /** Skip exact term matching recognition, keyword fields highlighting is not supported */
-
-        // -------------------------------------
-        // Recognize wildcard queries
-        /** 
-         * @todo check for PCRE unicode support may be performed through Zend_Environment in some future 
-         */
-        ErrorHandler::start(E_WARNING);
-        $result = preg_match('/\pL/u', 'a');
-        ErrorHandler::stop();
-        if ($result == 1) {
-            $word = iconv($this->_encoding, 'UTF-8', $this->_word);
-            $wildcardsPattern = '/[*?]/u';
-            $subPatternsEncoding = 'UTF-8';
-        } else {
-            $word = $this->_word;
-            $wildcardsPattern = '/[*?]/';
-            $subPatternsEncoding = $this->_encoding;
-        }
-        $subPatterns = preg_split($wildcardsPattern, $word, -1, PREG_SPLIT_OFFSET_CAPTURE);
-        if (count($subPatterns) > 1) {
-            // Wildcard query is recognized
-
-            $pattern = '';
-
-            foreach ($subPatterns as $id => $subPattern) {
-                // Append corresponding wildcard character to the pattern before each sub-pattern (except first)
-                if ($id != 0) {
-                    $pattern .= $word[ $subPattern[1] - 1 ];
-                }
-
-                // Check if each subputtern is a single word in terms of current analyzer
-                $tokens = Analyzer\Analyzer::getDefault()->tokenize($subPattern[0], $subPatternsEncoding);
-                if (count($tokens) > 1) {
-                    // Do nothing (nothing is highlighted)
-                    return;
-                }
-                foreach ($tokens as $token) {
-                    $pattern .= $token->getTermText();
-                }
-            }
-
-            $term  = new Index\Term($pattern, $this->_field);
-            $query = new Query\Wildcard($term);
-
-            $query->_highlightMatches($highlighter);
-            return;
-        }
-
-
-        // -------------------------------------
-        // Recognize one-term multi-term and "insignificant" queries
-        $tokens = Analyzer\Analyzer::getDefault()->tokenize($this->_word, $this->_encoding);
-
-        if (count($tokens) == 0) {
-            // Do nothing
-            return;
-        }
-
-        if (count($tokens) == 1) {
-            $highlighter->highlight($tokens[0]->getTermText());
-            return;
-        }
-
-        //It's not insignificant or one term query
-        $words = [];
-        foreach ($tokens as $token) {
-            $words[] = $token->getTermText();
-        }
-        $highlighter->highlight($words);
     }
 
     /**

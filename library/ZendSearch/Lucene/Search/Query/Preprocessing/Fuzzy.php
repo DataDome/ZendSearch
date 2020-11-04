@@ -157,8 +157,8 @@ class Fuzzy extends AbstractPreprocessing
         // -------------------------------------
         // Recognize wildcard queries
 
-        /** 
-         * @todo check for PCRE unicode support may be performed through Zend_Environment in some future 
+        /**
+         * @todo check for PCRE unicode support may be performed through Zend_Environment in some future
          */
         ErrorHandler::start(E_WARNING);
         $result = preg_match('/\pL/u', 'a');
@@ -196,57 +196,6 @@ class Fuzzy extends AbstractPreprocessing
 
         // Word is tokenized into several tokens
         throw new QueryParserException('Fuzzy search is supported only for non-multiple word terms');
-    }
-
-    /**
-     * Query specific matches highlighting
-     *
-     * @param Highlighter $highlighter  Highlighter object (also contains doc for highlighting)
-     */
-    protected function _highlightMatches(Highlighter $highlighter)
-    {
-        /** Skip fields detection. We don't need it, since we expect all fields presented in the HTML body and don't differentiate them */
-
-        /** Skip exact term matching recognition, keyword fields highlighting is not supported */
-
-        // -------------------------------------
-        // Recognize wildcard queries
-
-        /** 
-         * @todo check for PCRE unicode support may be performed through Zend_Environment in some future 
-         */
-        ErrorHandler::start(E_WARNING);
-        $result = preg_match('/\pL/u', 'a');
-        ErrorHandler::stop();
-        if ($result == 1) {
-            $subPatterns = preg_split('/[*?]/u', iconv($this->_encoding, 'UTF-8', $this->_word));
-        } else {
-            $subPatterns = preg_split('/[*?]/', $this->_word);
-        }
-        if (count($subPatterns) > 1) {
-            // Do nothing
-            return;
-        }
-
-
-        // -------------------------------------
-        // Recognize one-term multi-term and "insignificant" queries
-        $tokens = Analyzer\Analyzer::getDefault()->tokenize($this->_word, $this->_encoding);
-        if (count($tokens) == 0) {
-            // Do nothing
-            return;
-        }
-        if (count($tokens) == 1) {
-            $term  = new Index\Term($tokens[0]->getTermText(), $this->_field);
-            $query = new Query\Fuzzy($term, $this->_minimumSimilarity);
-
-            $query->_highlightMatches($highlighter);
-            return;
-        }
-
-        // Word is tokenized into several tokens
-        // But fuzzy search is supported only for non-multiple word terms
-        // Do nothing
     }
 
     /**
