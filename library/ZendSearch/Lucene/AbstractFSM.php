@@ -209,9 +209,9 @@ abstract class AbstractFSM
      * Add transition rules
      *
      * array structure:
-     * array( array(sourseState, input, targetState[, inputAction]),
-     *        array(sourseState, input, targetState[, inputAction]),
-     *        array(sourseState, input, targetState[, inputAction]),
+     * array( array(sourceState, input, targetState[, inputAction]),
+     *        array(sourceState, input, targetState[, inputAction]),
+     *        array(sourceState, input, targetState[, inputAction]),
      *        ...
      *      )
      *
@@ -383,6 +383,7 @@ abstract class AbstractFSM
             throw new Exception\RuntimeException('There is no any rule for current state (' . $this->_currentState . ').');
         }
         if (!isset($this->_rules[$this->_currentState][$input])) {
+//            die;
             throw new Exception\InvalidArgumentException('There is no any rule for {current state, input} pair (' . $this->_currentState . ', ' . $input . ').');
         }
 

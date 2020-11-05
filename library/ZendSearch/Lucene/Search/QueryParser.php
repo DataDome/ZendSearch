@@ -13,6 +13,7 @@ namespace ZendSearch\Lucene\Search;
 use Exception;
 use ZendSearch\Lucene;
 use ZendSearch\Lucene\Analysis\Analyzer;
+use ZendSearch\Lucene\Analysis\Analyzer\Common\TextNumWithDotAndIpV6;
 use ZendSearch\Lucene\Exception\RuntimeException;
 use ZendSearch\Lucene\Index;
 use ZendSearch\Lucene\Search\Exception\QueryParserException;
@@ -192,15 +193,24 @@ class QueryParser extends Lucene\AbstractFSM
             [self::ST_COMMON_QUERY_ELEMENT, QueryToken::TT_NOT_LEXEME,       self::ST_COMMON_QUERY_ELEMENT],
             [self::ST_COMMON_QUERY_ELEMENT, QueryToken::TT_NUMBER,           self::ST_COMMON_QUERY_ELEMENT],
 
+            // Regular closed range
             [self::ST_CLOSEDINT_RQ_START,      QueryToken::TT_WORD,           self::ST_CLOSEDINT_RQ_FIRST_TERM],
             [self::ST_CLOSEDINT_RQ_FIRST_TERM, QueryToken::TT_TO_LEXEME,      self::ST_CLOSEDINT_RQ_TO_TERM],
             [self::ST_CLOSEDINT_RQ_TO_TERM,    QueryToken::TT_WORD,           self::ST_CLOSEDINT_RQ_LAST_TERM],
             [self::ST_CLOSEDINT_RQ_LAST_TERM,  QueryToken::TT_RANGE_INCL_END, self::ST_COMMON_QUERY_ELEMENT],
 
+            // IPV6 closed range
+//            [self::ST_CLOSEDINT_RQ_START,      QueryToken::TT_FIELD,           self::ST_CLOSEDINT_RQ_FIRST_TERM],
+//            [self::ST_CLOSEDINT_RQ_FIRST_TERM, QueryToken::TT_FIELD,           self::ST_CLOSEDINT_RQ_TO_TERM],
+//            [self::ST_CLOSEDINT_RQ_TO_TERM,    QueryToken::TT_FIELD,           self::ST_CLOSEDINT_RQ_LAST_TERM],
+//            [self::ST_CLOSEDINT_RQ_LAST_TERM,  QueryToken::TT_FIELD,           self::ST_COMMON_QUERY_ELEMENT],
+
+            // Regular openend range
             [self::ST_OPENEDINT_RQ_START,      QueryToken::TT_WORD,           self::ST_OPENEDINT_RQ_FIRST_TERM],
             [self::ST_OPENEDINT_RQ_FIRST_TERM, QueryToken::TT_TO_LEXEME,      self::ST_OPENEDINT_RQ_TO_TERM],
             [self::ST_OPENEDINT_RQ_TO_TERM,    QueryToken::TT_WORD,           self::ST_OPENEDINT_RQ_LAST_TERM],
             [self::ST_OPENEDINT_RQ_LAST_TERM,  QueryToken::TT_RANGE_EXCL_END, self::ST_COMMON_QUERY_ELEMENT]
+
         ]);
 
 
@@ -352,7 +362,37 @@ class QueryParser extends Lucene\AbstractFSM
             self::$_instance->_lastToken    = null;
             self::$_instance->_context      = new QueryParserContext(self::$_instance->_encoding);
             self::$_instance->_contextStack = [];
+
+            $ipv6withoutCidr = '/' . TextNumWithDotAndIpV6::IPV6_REGEXP_PATTERN . '/';
+            $ipv6WithCIDR = '/^((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:)))(%.+)?(\/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8]))?$/';
+            preg_match_all(
+                $ipv6withoutCidr,
+                $strQuery,
+                $matchedIpV6s
+            );
+
+            $ipV6s = $matchedIpV6s[0];
+            foreach($ipV6s as $ipV6InQuery) {
+                $ipv6withoutDoubleDots = str_replace(':','Z' /*char that cant be in an ip v6*/, $ipV6InQuery);
+                $strQuery = str_replace($ipV6InQuery, $ipv6withoutDoubleDots, $strQuery);
+            }
             self::$_instance->_tokens       = self::$_instance->_lexer->tokenize($strQuery, self::$_instance->_encoding);
+//            var_dump(self::$_instance->_tokens);
+
+            foreach(self::$_instance->_tokens as $token) {
+//                var_dump('TOKEN:' . $token->getText());
+                $originalIpV6Text = str_replace('Z', ':', $token->getText());
+                foreach($ipV6s as $ipV6) {
+//                    var_dump($originalIpV6Text, $ipV6);
+                    if ($token instanceof QueryToken && str_contains($originalIpV6Text, $ipV6)) {
+//                        var_dump('replaced!!!');
+                        $token->setText($originalIpV6Text);
+                        continue 1;
+                    }
+                }
+            }
+//            die;
+//            var_dump(self::$_instance->_tokens);die;
 
             // Empty query
             if (count(self::$_instance->_tokens) == 0) {
@@ -363,6 +403,7 @@ class QueryParser extends Lucene\AbstractFSM
 
                 try {
                     self::$_instance->_currentToken = $token;
+//                    var_dump($token);
                     self::$_instance->process($token->type);
 
                     self::$_instance->_lastToken = $token;
@@ -393,12 +434,16 @@ class QueryParser extends Lucene\AbstractFSM
                     $query->addTerm(new Index\Term($token->getTermText()), $termsSign);
                 }
 
-
                 return $query;
             } else {
-                throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
+                throw $e;
             }
         }
+    }
+
+    public static function preTokenizeIpV6($str)
+    {
+
     }
 
     /*********************************************************************
@@ -616,6 +661,9 @@ class QueryParser extends Lucene\AbstractFSM
     {
         $tokens = Analyzer\Analyzer::getDefault()->tokenize($this->_rqFirstTerm, $this->_encoding);
         if (count($tokens) > 1) {
+//            var_dump($tokens);die;
+            var_dump($tokens);
+            die;
             throw new QueryParserException('Range query boundary terms must be non-multiple word terms');
         } elseif (count($tokens) == 1) {
             $from = new Index\Term(reset($tokens)->getTermText(), $this->_context->getField());

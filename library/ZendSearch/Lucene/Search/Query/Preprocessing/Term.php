@@ -239,6 +239,11 @@ class Term extends AbstractPreprocessing
             str_split(QueryLexer::QUERY_LEXEMEMODIFIER_CHARS),
             str_split(QueryLexer::QUERY_SINGLE_CHAR_WILDCARD_CHAR)
         );
+        if (preg_match('/'.Analyzer\Common\TextNumWithDotAndIpV6::IPV6_REGEXP_PATTERN.'/', $this->_word, $matches)) {
+            // Dont escape ":" for ipv6 words
+            $charsToEscape = array_filter($charsToEscape, fn($char) => $char !== ':');
+        }
+
         $escapedWord = '';
         for($charIndex = 0; $charIndex < mb_strlen($this->_word, $this->_encoding); $charIndex++) {
             if(in_array($this->_word[$charIndex], $charsToEscape) &&
@@ -253,7 +258,7 @@ class Term extends AbstractPreprocessing
         if ($this->getBoost() != 1) {
             $query .= '^' . round($this->getBoost(), 4);
         }
-
+//var_dump($this, $query);
         return $query;
     }
 }

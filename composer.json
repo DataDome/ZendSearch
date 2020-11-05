@@ -17,9 +17,10 @@
         }
     ],
     "require": {
-        "php": ">=7.1",
+        "php": ">=7.4",
         "laminas/laminas-stdlib": "3.*",
-        "ext-iconv": "*"
+        "ext-iconv": "*",
+        "symfony/polyfill-php80": "^1.20"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.0"

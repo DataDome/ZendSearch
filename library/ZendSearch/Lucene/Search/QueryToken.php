@@ -80,7 +80,7 @@ class QueryToken
      */
     const TC_WORD           = 0;   // Word
     const TC_PHRASE         = 1;   // Phrase (one or several quoted words)
-    const TC_NUMBER         = 2;   // Nubers, which are used with syntax elements. Ex. roam~0.8
+    const TC_NUMBER         = 2;   // Numbers, which are used with syntax elements. Ex. roam~0.8
     const TC_SYNTAX_ELEMENT = 3;   // +  -  ( )  [ ]  { }  !  ||  && ~ ^
 
 
@@ -215,5 +215,13 @@ class QueryToken
                     'Unrecognized lexeme type: \'' . $tokenCategory . '\''
                 );
         }
+    }
+
+    public function getText() {
+        return $this->text;
+    }
+
+    public function setText($text) {
+        $this->text = $text;
     }
 }
