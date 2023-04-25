@@ -770,7 +770,7 @@ class Boolean extends AbstractQuery
 
         foreach ($this->_subqueries as $id => $subquery) {
             if ($id != 0) {
-                $query .= ' ';
+                $query .= ' OR ';
             }
 
             if ($this->_signs === null || $this->_signs[$id] === true) {

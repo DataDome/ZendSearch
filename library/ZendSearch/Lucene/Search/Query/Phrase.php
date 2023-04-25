@@ -534,7 +534,7 @@ class Phrase extends AbstractQuery
 
         foreach ($this->_terms as $id => $term) {
             if ($id != 0) {
-                $query .= ' ';
+                $query .= ' OR ';
             }
             $query .= $term->text;
         }

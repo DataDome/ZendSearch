@@ -623,7 +623,7 @@ class MultiTerm extends AbstractQuery
 
         foreach ($this->_terms as $id => $term) {
             if ($id != 0) {
-                $query .= ' ';
+                $query .= ' OR ';
             }
 
             if ($this->_signs === null || $this->_signs[$id] === true) {
